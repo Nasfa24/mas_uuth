@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mas Uuth | Hadir untuk Mendengar</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="profile-card">
+    <h1>MAS UUTH AKHMADIE</h1>
+    <h3>Staf Khusus Ketua DPRD Jatim | Entrepreneur</h3>
+    <p><i>"Bukan politisi yang datang meminta suara, melainkan tetangga yang hadir untuk meringankan beban."</i></p>
+  </div>
+  
+  <div class="nav-menu">
+    <a href="index.html">Profil</a>
+    <a href="program.html" onclick="navigasi(event, 'program.html')">Program</a>
+  </div>
+  
+  <div class="container">
+    <h2 style="color: var(--emerald-green);">Kirim Aspirasi / Permintaan Bantuan</h2>
+    
+    <form id="formAspirasi">
+      <!-- Honeypot untuk bot spam -->
+      <input type="text" id="website" name="website" class="hp-field" tabindex="-1" autocomplete="off">
+      
+      <input type="text" id="nama" placeholder="Nama Lengkap Anda" required>
+      <textarea id="pesan" placeholder="Sampaikan aspirasi atau keluhan Anda..." required style="height: 120px;"></textarea>
+      
+      <!-- Checkbox UU PDP -->
+      <div class="pdp-container">
+        <input type="checkbox" id="pdp" required>
+        <label for="pdp">Saya setuju data pribadi (nama & aspirasi) dikumpulkan dan diproses oleh Tim Mas Uuth sesuai ketentuan perundang-undangan (UU PDP) untuk keperluan tindak lanjut.</label>
+      </div>
+
+      <button type="submit" class="btn-gold">Kirim Aspirasi</button>
+    </form>
+    
+    <hr style="margin: 30px 0; border: 1px solid #ddd;">
+    
+    <button onclick="clearCacheAndRefresh()" class="btn-dark">Refresh & Clear Cache Aplikasi</button>
+  </div>
+  
+  <script src="app.js"></script>
+</body>
+</html>
