@@ -1,0 +1,241 @@
+/* ==========================================================================
+   UNIVERSAL STYLESHEET - MAS UUTH MPA
+   Memadukan Tipografi Premium, UI/UX Modern, dan Form Utilities
+   ========================================================================== */
+
+/* 1. IMPORTS & FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap');
+
+/* 2. ROOT VARIABLES (Brand Guidelines) */
+:root {
+    --emerald-green: #50C878;
+    --emerald-dark: #3fa160;
+    --warm-gold: #FFB703;
+    --warm-gold-dark: #e6a502;
+    --clean-slate: #FFFFFF;
+    --slate-grey-light: #F5F5F5;
+    --slate-grey-dark: #333333;
+}
+
+/* 3. BASE RESET & TYPOGRAPHY */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--slate-grey-light);
+    color: var(--slate-grey-dark);
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 { 
+    font-family: 'Satoshi', sans-serif; 
+    font-weight: 700; 
+    letter-spacing: -0.02em; 
+}
+
+main { flex: 1; padding-bottom: 60px;}
+
+/* Typography Utilities */
+.text-emerald { color: var(--emerald-green); }
+.text-gold { color: var(--warm-gold); }
+.bg-emerald { background-color: var(--emerald-green); }
+
+/* 4. NAVBAR & NAVIGATION */
+.navbar { 
+    background-color: var(--clean-slate); 
+    backdrop-filter: blur(10px); 
+    border-bottom: 1px solid rgba(0,0,0,0.03); 
+}
+.navbar-brand { 
+    color: var(--emerald-green) !important; 
+    font-weight: 800; 
+    letter-spacing: -0.5px; 
+}
+.nav-link { 
+    font-family: 'Satoshi', sans-serif; 
+    font-weight: 600; 
+    color: var(--slate-grey-dark); 
+    transition: 0.3s; 
+    font-size: 1.05rem; 
+}
+.nav-link:hover, .nav-link.active { color: var(--emerald-green); }
+
+/* 5. BUTTONS PREMIUM */
+.btn-primary-custom {
+    background-color: var(--emerald-green);
+    color: var(--clean-slate);
+    font-family: 'Satoshi', sans-serif;
+    border: none; padding: 12px 30px; border-radius: 50px;
+    font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(80, 200, 120, 0.25); font-size: 1.05rem;
+}
+.btn-primary-custom:hover {
+    background-color: var(--emerald-dark); color: var(--clean-slate);
+    transform: translateY(-3px); box-shadow: 0 12px 25px rgba(80, 200, 120, 0.35);
+}
+.btn-secondary-custom {
+    background-color: var(--clean-slate); color: var(--slate-grey-dark);
+    font-family: 'Satoshi', sans-serif; border: 2px solid #e0e0e0;
+    padding: 10px 28px; border-radius: 50px; font-weight: 700;
+    transition: all 0.3s ease; font-size: 1.05rem;
+}
+.btn-secondary-custom:hover {
+    border-color: var(--emerald-green); color: var(--emerald-green);
+    background-color: var(--clean-slate);
+}
+
+/* 6. HERO SECTION */
+.hero-section {
+    background: linear-gradient(135deg, var(--clean-slate) 0%, var(--slate-grey-light) 100%);
+    padding: 6rem 0 7rem 0; position: relative; overflow: hidden;
+}
+.hero-tagline {
+    font-family: 'Satoshi', sans-serif; font-size: 1.1rem; font-weight: 700;
+    color: var(--warm-gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.2rem;
+}
+.hero-title { font-size: 3.2rem; font-weight: 900; line-height: 1.2; color: var(--slate-grey-dark); margin-bottom: 1.5rem; }
+.hero-lead { font-size: 1.15rem; line-height: 1.8; color: #666; max-width: 750px; }
+
+/* 7. PROFILE CARDS & BADGES */
+.profile-card {
+    background-color: var(--clean-slate); border-radius: 24px; padding: 3rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.04); margin-top: -5rem; position: relative; z-index: 10; border: 1px solid rgba(0,0,0,0.02);
+}
+.profile-img-container { position: relative; display: inline-block; }
+.profile-img {
+    width: 260px; height: 260px; object-fit: cover; object-position: top;
+    border-radius: 20px; border: 4px solid var(--clean-slate);
+    box-shadow: 0 15px 35px rgba(80, 200, 120, 0.15); background-color: #e9ecef;
+}
+.profile-badge {
+    position: absolute; bottom: -15px; right: -15px; background-color: var(--warm-gold);
+    color: var(--clean-slate); width: 60px; height: 60px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    border: 4px solid var(--clean-slate); box-shadow: 0 5px 15px rgba(255, 183, 3, 0.3);
+}
+
+.table-rekam-jejak {
+    background-color: var(--clean-slate); border-radius: 16px; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02);
+}
+.table-rekam-jejak thead { background-color: var(--emerald-green); color: var(--clean-slate); font-family: 'Satoshi', sans-serif; }
+.table-rekam-jejak th { font-weight: 700; border: none; padding: 18px; font-size: 1.1rem; }
+.table-rekam-jejak td { border-bottom: 1px solid #f0f0f0; padding: 18px; vertical-align: middle; }
+
+.badge-skill {
+    background-color: rgba(80, 200, 120, 0.08); color: var(--emerald-dark);
+    font-family: 'Satoshi', sans-serif; font-weight: 600; padding: 10px 18px;
+    border-radius: 50px; margin-right: 8px; margin-bottom: 10px; display: inline-block; border: 1px solid rgba(80, 200, 120, 0.2);
+}
+
+/* 8. CARDS (Program & Karya) */
+.program-card, .karya-card {
+    border: 1px solid rgba(0,0,0,0.02); border-radius: 20px; background-color: var(--clean-slate);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+    height: 100%; position: relative; overflow: hidden; z-index: 1;
+}
+.program-card { padding: 2.5rem 2rem; }
+.karya-card { padding: 2.2rem; }
+.program-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, var(--emerald-green), var(--warm-gold)); opacity: 0; transition: opacity 0.3s ease;
+}
+.program-card:hover, .karya-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(80, 200, 120, 0.12); }
+.program-card:hover::before { opacity: 1; }
+
+.program-icon-wrapper {
+    width: 70px; height: 70px; background-color: rgba(80, 200, 120, 0.08); color: var(--emerald-green);
+    border-radius: 18px; display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; margin-bottom: 1.8rem; border: 1px solid rgba(80, 200, 120, 0.15);
+}
+.karya-badge {
+    background-color: rgba(80, 200, 120, 0.1); color: var(--emerald-dark);
+    font-family: 'Satoshi', sans-serif; font-size: 0.85rem; padding: 6px 16px;
+    border-radius: 50px; font-weight: 700; border: 1px solid rgba(80, 200, 120, 0.2);
+}
+
+/* 9. WHATSAPP & LAYANAN CEPAT */
+.layanan-container {
+    background-color: var(--clean-slate); border-radius: 24px; padding: 4rem 3rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.04); margin-top: 5rem; margin-bottom: 5rem;
+    border: 1px solid rgba(0,0,0,0.02); position: relative; overflow: hidden;
+}
+.layanan-container::after {
+    content: "\F64C"; font-family: "bootstrap-icons"; position: absolute; right: -50px; bottom: -50px;
+    font-size: 250px; color: rgba(80, 200, 120, 0.03); z-index: 0; pointer-events: none;
+}
+.layanan-content { position: relative; z-index: 1; }
+
+.btn-wa {
+    font-family: 'Satoshi', sans-serif; border-radius: 50px; padding: 16px 24px; font-weight: 700; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none; color: var(--clean-slate); width: 100%; text-decoration: none; position: relative; overflow: hidden;
+}
+.btn-wa:hover { transform: translateY(-5px); color: var(--clean-slate); }
+.btn-ambulance { background-color: var(--emerald-green); box-shadow: 0 10px 25px rgba(80,200,120,0.3); }
+.btn-ambulance:hover { background-color: var(--emerald-dark); box-shadow: 0 15px 35px rgba(80,200,120,0.4); }
+.btn-hiace { background-color: var(--warm-gold); color: var(--slate-grey-dark); box-shadow: 0 10px 25px rgba(255,183,3,0.3); }
+.btn-hiace:hover { background-color: var(--warm-gold-dark); color: var(--slate-grey-dark); box-shadow: 0 15px 35px rgba(255,183,3,0.4); }
+.btn-kolaborasi { background-color: var(--slate-grey-dark); box-shadow: 0 10px 25px rgba(51,51,51,0.25); }
+.btn-kolaborasi:hover { background-color: #1a1a1a; box-shadow: 0 15px 35px rgba(51,51,51,0.35); }
+
+/* 10. FLOATING CONTROLS */
+.floating-controls { position: fixed; bottom: 35px; right: 35px; z-index: 1050; display: flex; flex-direction: column; gap: 12px; }
+.btn-float {
+    font-family: 'Satoshi', sans-serif; border-radius: 50px; padding: 12px 24px; font-weight: 700;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: none; font-size: 0.95rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-float:hover { transform: translateY(-3px); }
+.btn-refresh { background-color: var(--emerald-green); color: white; }
+.btn-refresh:hover { background-color: var(--emerald-dark); color: white; box-shadow: 0 12px 30px rgba(80, 200, 120, 0.3); }
+.btn-clear { background-color: var(--slate-grey-dark); color: white; }
+.btn-clear:hover { background-color: #1a1a1a; color: white; }
+
+/* ==========================================
+   11. FORM UTILITIES (Anti-Spam & Input Fixes)
+   ========================================== */
+/* Fix iOS Zoom & Styling Input agar seragam */
+input[type="text"], input[type="email"], input[type="tel"], textarea {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px; /* Wajib 16px mencegah auto-zoom di iOS Safari */
+    box-sizing: border-box;
+    transition: 0.3s ease;
+}
+input:focus, textarea:focus {
+    border-color: var(--emerald-green);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(80, 200, 120, 0.1);
+}
+
+/* Honeypot Field (Anti-Spam Bot Catcher) */
+.hp-field {
+    display: none !important;
+    position: absolute;
+    left: -9999px;
+}
+
+/* Checkbox Kebijakan Privasi (PDP) */
+.pdp-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.5;
+}
+.pdp-container input[type="checkbox"] {
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--emerald-green);
+}
