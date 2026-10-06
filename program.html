@@ -90,20 +90,21 @@
                     <p class="text-muted mb-4" style="font-size: 1.1rem;">Kirim permintaan langsung ke tim Mas Uuth. Mudah, cepat, dan tanpa birokrasi berbelit.</p>
                     <div class="d-inline-block px-4 py-2 rounded-pill" style="background-color: rgba(80, 200, 120, 0.1); border: 1px solid rgba(80, 200, 120, 0.3);">
                         <small class="text-emerald fw-bold" style="font-family: 'Satoshi', sans-serif; letter-spacing: 0.5px;">
-                            <i class="bi bi-shield-lock-fill me-1"></i> PRIVASI TERJAGA: Dokumen KTP/NIK hanya diunggah via chat tertutup.
+                            <i class="bi bi-shield-lock-fill me-1"></i> PRIVASI TERJAGA: Dokumen KTP/NIK hanya diminta via chat tertutup.
                         </small>
                     </div>
                 </div>
 
                 <div class="row g-4 justify-content-center">
+                    <!-- Tombol diubah menjadi "#" karena akan ditangani oleh sistem Lead Capture JavaScript -->
                     <div class="col-md-4">
-                        <a href="https://wa.me/6281339760265?text=%F0%9F%92%9A+*ORDER+AMBULANCE*+%F0%9F%92%9A%0ANama+Pemesan+:+...%0ANo.+HP+++:+...%0A%0A%F0%9F%91%87%F0%9F%8F%BD+++%F0%9F%91%87%F0%9F%8F%BD+++%F0%9F%91%87%F0%9F%8F%BD%0A%0AHari/tanggal+++:+...%0AJam+Jemput+++:+...%0ADari/alamat+++:+...%0ATujuan+Lengkap+++:+...%0ANama+Pasien/Janazah+:+...%0A%0A%E2%80%BC%EF%B8%8F+*Catatan+:+Kami+menyediakan+AMBULANCE,+nanti+ada+biaya+BBM+dan+Supir*.+Tolong+di+komunikasikan+Nggih.+%F0%9F%99%8F%F0%9F%8F%BD" class="btn-wa btn-ambulance wa-link" target="_blank" data-service="Ambulance"><i class="bi bi-hospital fs-4"></i> Pesan Ambulance</a>
+                        <a href="#" class="btn-wa btn-ambulance wa-link" data-service="Ambulance"><i class="bi bi-hospital fs-4"></i> Pesan Ambulance</a>
                     </div>
                     <div class="col-md-4">
-                        <a href="https://wa.me/6281339760265?text=%F0%9F%92%9A+*ORDER+BUS/HIACE*+%F0%9F%92%9A%0AType+Kendaran+:+Hiace+/+Bus+(silahkan+di+isi)%0ATanggal+:+...%0AJam+:+...%0ATitik+Kumpul+:+...%0ATujuan+:+...%0APenanggung+Jawab+:+...%0AHP+Penanggung+Jawab+:+...%0A%0A%E2%80%BC%EF%B8%8F+*Catatan*+:+Kami+menyediakan+*Bus+atau+Hiace+saja*,+nanti+ada+*biaya+BBM+dan+Supir*.+Tol+ditanggung+Penyewa+%F0%9F%99%8F%F0%9F%8F%BD" class="btn-wa btn-hiace wa-link" target="_blank" data-service="Bus/Hiace"><i class="bi bi-bus-front fs-4"></i> Pesan Bus / Hiace</a>
+                        <a href="#" class="btn-wa btn-hiace wa-link" data-service="Bus/Hiace"><i class="bi bi-bus-front fs-4"></i> Pesan Bus / Hiace</a>
                     </div>
                     <div class="col-md-4">
-                        <a href="https://wa.me/6281339760265?text=Selamat+Pagi.+mas+Uuth.+%F0%9F%99%8F%F0%9F%8F%BD%0A%0ASaya+%5B+Nama+%5D,+izin+menguhubungi+Mas+untuk+diskusi+tentang+Politik+dan+Sosial+yang+ada+di+Surabaya.%0A%0AJika+ada+waktu,+mungkin+bisa+dibalas.%0AMakasih,+salam+sehat+selalu.+%F0%9F%99%8F%F0%9F%8F%BD" class="btn-wa btn-kolaborasi wa-link" target="_blank" data-service="Kolaborasi"><i class="bi bi-chat-dots fs-4"></i> Ruang Diskusi</a>
+                        <a href="#" class="btn-wa btn-kolaborasi wa-link" data-service="Kolaborasi"><i class="bi bi-chat-dots fs-4"></i> Ruang Diskusi</a>
                     </div>
                 </div>
             </div>
@@ -119,12 +120,85 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/app.js"></script>
 
+    <!-- CORE LOGIC: Lead Capture & Dynamic WA Generator -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true, background: '#ffffff', color: '#333333' });
             document.querySelectorAll('.wa-link').forEach(link => {
-                link.addEventListener('click', function() {
-                    Toast.fire({ icon: 'success', title: `Menuju WhatsApp Admin untuk ${this.getAttribute('data-service')}...` });
+                link.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    const serviceName = this.getAttribute('data-service');
+
+                    // 1. Munculkan Form Pengisian Data (Lead Capture)
+                    const { value: formValues } = await Swal.fire({
+                        title: `Mulai ${serviceName}`,
+                        html: `
+                            <div class="text-start px-2">
+                                <p class="text-muted mb-4" style="font-size:0.9rem; line-height: 1.5;">
+                                    Silakan lengkapi data diri Anda. Tim kami akan segera merespons pesan Anda via WhatsApp.
+                                </p>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-emerald" style="font-size:0.85rem;">Nama Lengkap</label>
+                                    <input id="lead-nama" class="form-control" placeholder="Contoh: Budi Santoso" style="border-radius: 12px; padding: 12px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-emerald" style="font-size:0.85rem;">Nomor WhatsApp</label>
+                                    <input id="lead-wa" type="number" class="form-control" placeholder="Contoh: 081234567890" style="border-radius: 12px; padding: 12px;">
+                                </div>
+                            </div>
+                        `,
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#50C878',
+                        cancelButtonColor: '#333333',
+                        confirmButtonText: '<i class="bi bi-whatsapp me-2"></i> Lanjut ke Chat',
+                        cancelButtonText: 'Batal',
+                        customClass: { popup: 'rounded-4', title: 'fw-bold' },
+                        preConfirm: () => {
+                            const nama = document.getElementById('lead-nama').value.trim();
+                            const wa = document.getElementById('lead-wa').value.trim();
+                            if (!nama || !wa) {
+                                Swal.showValidationMessage('Nama dan Nomor WhatsApp wajib diisi!');
+                                return false;
+                            }
+                            return { nama, wa };
+                        }
+                    });
+
+                    // 2. Eksekusi jika form diisi
+                    if (formValues) {
+                        const { nama, wa } = formValues;
+                        let waText = "";
+
+                        // Inject variabel nama & wa ke dalam template pesan secara dinamis
+                        if (serviceName === "Ambulance") {
+                            waText = `💚 *ORDER AMBULANCE* 💚\n\nNama Pemesan : *${nama}*\nNo. HP : ${wa}\n\n👇🏽 👇🏽 👇🏽\n\nHari/tanggal : ...\nJam Jemput : ...\nDari/alamat : ...\nTujuan Lengkap : ...\nNama Pasien/Jenazah : ...\n\n‼️ *Catatan : Kami menyediakan AMBULANCE, nanti ada biaya BBM dan Supir*. Tolong di komunikasikan Nggih. 🙏🏽`;
+                        } else if (serviceName === "Bus/Hiace") {
+                            waText = `💚 *ORDER BUS/HIACE* 💚\n\nNama Penyewa : *${nama}*\nNo. HP : ${wa}\n\nType Kendaraan : Hiace / Bus (silahkan di isi)\nTanggal : ...\nJam : ...\nTitik Kumpul : ...\nTujuan : ...\nPenanggung Jawab : ...\n\n‼️ *Catatan* : Kami menyediakan *Bus atau Hiace saja*, nanti ada *biaya BBM dan Supir*. Tol ditanggung Penyewa 🙏🏽`;
+                        } else if (serviceName === "Kolaborasi") {
+                            waText = `Selamat Pagi. mas Uuth. 🙏🏽\n\nSaya *${nama}*, izin menghubungi Mas untuk diskusi tentang Politik dan Sosial yang ada di Surabaya.\n\nJika ada waktu, mungkin bisa dibalas.\nMakasih, salam sehat selalu. 🙏🏽`;
+                        }
+
+                        // Encode URL agar siap dikirim
+                        const waUrl = `https://wa.me/6281339760265?text=${encodeURIComponent(waText)}`;
+
+                        // 3. SILENT BACKEND SAVE (Kirim Leads ke Google Sheets di background)
+                        if (typeof scriptURL !== 'undefined') {
+                            fetch(scriptURL, {
+                                method: 'POST',
+                                mode: 'no-cors',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ tipe: "Lead WhatsApp", nama: nama, wa: wa, pesan: `Layanan: ${serviceName}` })
+                            }).catch(err => console.log("Silent lead backup failed", err));
+                        }
+
+                        // 4. Arahkan pengguna ke WhatsApp
+                        const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 });
+                        Toast.fire({ icon: 'success', title: `Membuka WhatsApp...` });
+                        
+                        setTimeout(() => {
+                            window.open(waUrl, '_blank');
+                        }, 800);
+                    }
                 });
             });
         });

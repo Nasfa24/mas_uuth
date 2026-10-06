@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <!-- Memanggil Universal Stylesheet -->
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -72,7 +71,7 @@
     <script>
         const CACHE_KEY = 'mas_uuth_berita_data';
         const CACHE_TIMESTAMP_KEY = 'mas_uuth_berita_timestamp';
-        const TTL_MS = 15 * 60 * 1000; // 15 Menit
+        const TTL_MS = 15 * 60 * 1000; // TTL: 15 Menit
 
         document.addEventListener("DOMContentLoaded", () => { initDataFetch(); });
 
@@ -81,8 +80,9 @@
             const cachedTime = localStorage.getItem(CACHE_TIMESTAMP_KEY);
             const now = new Date().getTime();
             
-            const Toast = Swal.mixin({ toast: true, position: 'bottom-end', showConfirmButton: false, timer: 3500, timerProgressBar: true, background: '#ffffff', color: '#333333', customClass: { title: 'fw-bold' }});
+            const Toast = Swal.mixin({ toast: true, position: 'bottom-end', showConfirmButton: false, timer: 4000, timerProgressBar: true, background: '#ffffff', color: '#333333', customClass: { title: 'fw-bold' }});
 
+            // LOGIKA 1: Jika cache masih valid (di bawah 15 menit), jangan bebani server Google
             if (cachedData && cachedTime && (now - parseInt(cachedTime) < TTL_MS)) {
                 renderBerita(JSON.parse(cachedData));
                 return; 
@@ -91,25 +91,35 @@
             Toast.fire({ icon: 'info', title: 'Menarik data terbaru dari server...' });
 
             try {
-                // scriptURL dari app.js
+                // Fetch request ke GAS
                 const response = await fetch(scriptURL);
                 if (!response.ok) throw new Error('Network response failed');
                 
                 const data = await response.json();
+                
+                // Menyimpan data terbaru ke LocalStorage
                 localStorage.setItem(CACHE_KEY, JSON.stringify(data));
                 localStorage.setItem(CACHE_TIMESTAMP_KEY, now.toString());
+                
                 renderBerita(data);
             } catch (error) {
-                console.error("API Error:", error);
+                console.error("API Error / Server Limit (429):", error);
+                
+                // LOGIKA 2 (Resiliensi): Jika server down, tapi ada memori lokal
                 if (cachedData) {
                     renderBerita(JSON.parse(cachedData));
-                    Toast.fire({ icon: 'warning', title: 'Server sibuk. Menampilkan data offline.', timer: 5000 });
+                    Toast.fire({ 
+                        icon: 'warning', 
+                        title: 'Menampilkan data tersimpan. Refresh manual untuk update terbaru.', 
+                        timer: 6000 
+                    });
                 } else {
+                    // Jika server down dan perangkat baru pertama kali akses
                     document.getElementById('loading-indicator').style.display = 'none';
                     Swal.fire({
                         ...swalConfig, 
                         title: 'Koneksi Terputus',
-                        text: 'Gagal memuat data dari server. Silakan coba lagi.',
+                        text: 'Server gagal merespons. Pastikan koneksi internet Anda stabil.',
                         icon: 'error',
                         confirmButtonText: 'Coba Lagi'
                     }).then((result) => { if (result.isConfirmed) refreshData(); });
@@ -127,12 +137,14 @@
             }
 
             dataArray.forEach(item => {
+                // LOGIKA 3 (Frontend Sanitization): Lewati baris kosong / tanpa judul
                 if (!item.Judul || item.Judul.toString().trim() === '') return;
                 
                 const kategori = item.Kategori || 'Jurnal';
                 const tanggal = item.Tanggal || '-';
                 const status = item.Status ? item.Status.toString().toLowerCase() : 'publish';
 
+                // Hanya render berita dengan status 'publish'
                 if (status !== 'publish') return;
 
                 const cardHTML = `
