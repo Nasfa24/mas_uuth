@@ -7,17 +7,18 @@
     
     <!-- Bootstrap 5 CSS Framework -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
-    <!-- Tipografi Brand: Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- BRAND FONTS: Satoshi (Headlines) & Poppins (Body) -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
         /* BRAND GUIDELINES MAS UUTH */
         :root {
             --emerald-green: #50C878;
+            --emerald-dark: #3fa160;
             --warm-gold: #FFB703;
             --clean-slate: #FFFFFF;
             --slate-grey-light: #F5F5F5;
@@ -29,121 +30,186 @@
             background-color: var(--slate-grey-light);
             color: var(--slate-grey-dark);
             -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        h1, h2, h3, h4, h5, h6 { font-weight: 700; }
+        h1, h2, h3, h4, h5, h6 { 
+            font-family: 'Satoshi', sans-serif; 
+            font-weight: 700; 
+            letter-spacing: -0.02em;
+        }
+        
         .text-emerald { color: var(--emerald-green); }
         .text-gold { color: var(--warm-gold); }
         .bg-emerald { background-color: var(--emerald-green); }
 
         /* Navbar Styling */
-        .navbar-brand { color: var(--emerald-green) !important; font-weight: 800; letter-spacing: -0.5px; }
-        .nav-link { font-weight: 500; color: var(--slate-grey-dark); transition: 0.3s; }
-        .nav-link:hover { color: var(--emerald-green); }
+        .navbar {
+            background-color: var(--clean-slate);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+        .nav-link { font-family: 'Satoshi', sans-serif; font-weight: 600; color: var(--slate-grey-dark); transition: 0.3s; font-size: 1.05rem; }
+        .nav-link:hover, .nav-link.active { color: var(--emerald-green); }
 
         /* Hero Section */
         .hero-section {
             background: linear-gradient(135deg, var(--clean-slate) 0%, var(--slate-grey-light) 100%);
-            padding: 5rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 6rem 0 7rem 0;
+            position: relative;
+            overflow: hidden;
         }
         .hero-tagline {
+            font-family: 'Satoshi', sans-serif;
             font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--emerald-green);
+            font-weight: 700;
+            color: var(--warm-gold);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            margin-bottom: 1.2rem;
         }
         .hero-title {
-            font-size: 2.8rem;
-            font-weight: 800;
+            font-size: 3.2rem;
+            font-weight: 900;
             line-height: 1.2;
             color: var(--slate-grey-dark);
             margin-bottom: 1.5rem;
+        }
+        .hero-lead {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #666;
+            max-width: 750px;
         }
 
         /* Profile Card */
         .profile-card {
             background-color: var(--clean-slate);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-            margin-top: -3rem;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            margin-top: -5rem;
             position: relative;
             z-index: 10;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        .profile-img-container {
+            position: relative;
+            display: inline-block;
+        }
+        .profile-img {
+            width: 260px;
+            height: 260px;
+            object-fit: cover;
+            object-position: top;
+            border-radius: 20px;
+            border: 4px solid var(--clean-slate);
+            box-shadow: 0 15px 35px rgba(80, 200, 120, 0.15);
+            background-color: #e9ecef;
+        }
+        .profile-badge {
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            background-color: var(--warm-gold);
+            color: var(--clean-slate);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 4px solid var(--clean-slate);
+            box-shadow: 0 5px 15px rgba(255, 183, 3, 0.3);
         }
         
-        /* Table Track Record Customization */
+        /* Table Track Record */
         .table-rekam-jejak {
             background-color: var(--clean-slate);
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
         }
         .table-rekam-jejak thead {
             background-color: var(--emerald-green);
             color: var(--clean-slate);
+            font-family: 'Satoshi', sans-serif;
         }
-        .table-rekam-jejak th { font-weight: 600; border: none; padding: 15px; }
-        .table-rekam-jejak td { border-bottom: 1px solid #eee; padding: 15px; vertical-align: middle; }
+        .table-rekam-jejak th { font-weight: 700; border: none; padding: 18px; font-size: 1.1rem; }
+        .table-rekam-jejak td { border-bottom: 1px solid #f0f0f0; padding: 18px; vertical-align: middle; }
         .table-rekam-jejak tr:last-child td { border-bottom: none; }
         
         .badge-skill {
-            background-color: rgba(80, 200, 120, 0.1);
-            color: var(--emerald-green);
-            font-weight: 500;
-            padding: 8px 15px;
+            background-color: rgba(80, 200, 120, 0.08);
+            color: var(--emerald-dark);
+            font-family: 'Satoshi', sans-serif;
+            font-weight: 600;
+            padding: 10px 18px;
             border-radius: 50px;
             margin-right: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: inline-block;
+            border: 1px solid rgba(80, 200, 120, 0.2);
         }
 
-        /* Call to Action Buttons */
+        /* Buttons Premium */
         .btn-primary-custom {
             background-color: var(--emerald-green);
             color: var(--clean-slate);
+            font-family: 'Satoshi', sans-serif;
             border: none;
-            padding: 12px 28px;
+            padding: 12px 30px;
             border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(80,200,120,0.3);
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 20px rgba(80, 200, 120, 0.25);
+            font-size: 1.05rem;
         }
         .btn-primary-custom:hover {
-            background-color: #3fa160;
+            background-color: var(--emerald-dark);
             color: var(--clean-slate);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(80, 200, 120, 0.35);
         }
         .btn-secondary-custom {
             background-color: var(--clean-slate);
             color: var(--slate-grey-dark);
+            font-family: 'Satoshi', sans-serif;
             border: 2px solid #e0e0e0;
-            padding: 10px 26px;
+            padding: 10px 28px;
             border-radius: 50px;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.3s ease;
+            font-size: 1.05rem;
         }
         .btn-secondary-custom:hover {
-            border-color: var(--slate-grey-dark);
-            background-color: var(--slate-grey-light);
+            border-color: var(--emerald-green);
+            color: var(--emerald-green);
+            background-color: var(--clean-slate);
         }
+        
+        main { flex: 1; }
     </style>
 </head>
 <body>
 
     <!-- Navigasi -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 sticky-top">
+    <nav class="navbar navbar-expand-lg py-3 sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">MAS UUTH</a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="assets/logo 2.webp" alt="Logo Mas Uuth" height="45" style="object-fit: contain;">
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav gap-2 align-items-center">
+                <ul class="navbar-nav gap-3 align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link active fw-bold text-emerald" href="index.html">Profil</a>
+                        <a class="nav-link active" href="index.html">Profil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="program.html">Program & Layanan</a>
@@ -151,154 +217,172 @@
                     <li class="nav-item">
                         <a class="nav-link" href="berita-karya.html">Jurnal</a>
                     </li>
-                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-                        <a href="program.html" class="btn btn-sm btn-primary-custom">Hubungi Kami</a>
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                        <a href="program.html#layanan-cepat" class="btn btn-primary-custom">Hubungi Kami</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section text-center">
-        <div class="container">
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section text-center">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <p class="hero-tagline"><i class="bi bi-stars"></i> Suara Akar Rumput</p>
+                        <h1 class="hero-title">HADIR UNTUK MENDENGAR,<br><span class="text-emerald">BERGERAK UNTUK MELAYANI!</span></h1>
+                        <p class="hero-lead mx-auto mt-4 mb-5">
+                            "Bukan politisi yang datang meminta suara, melainkan tetangga yang hadir untuk meringankan beban."
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="program.html" class="btn btn-primary-custom"><i class="bi bi-box-arrow-up-right me-2"></i> Akses Layanan Warga</a>
+                            <a href="#profil-biografi" class="btn btn-secondary-custom">Kenali Mas Uuth</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profil & Biografi Singkat -->
+        <section class="container" id="profil-biografi">
             <div class="row justify-content-center">
-                <div class="col-lg-9">
-                    <p class="hero-tagline"><i class="bi bi-megaphone-fill"></i> Suara Akar Rumput</p>
-                    <h1 class="hero-title">HADIR UNTUK MENDENGAR,<br><span class="text-emerald">BERGERAK UNTUK MELAYANI!</span></h1>
-                    <p class="lead mt-4 mb-5 text-muted mx-auto" style="max-width: 750px;">
-                        "Bukan politisi yang datang meminta suara, melainkan tetangga yang hadir untuk meringankan beban."
-                    </p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="program.html" class="btn btn-primary-custom"><i class="bi bi-box-arrow-up-right"></i> Akses Layanan Warga</a>
-                        <a href="#profil-biografi" class="btn btn-secondary-custom">Kenali Mas Uuth</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Profil & Biografi Singkat -->
-    <section class="container" id="profil-biografi">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="profile-card">
-                    <div class="row align-items-center">
-                        <div class="col-md-4 text-center mb-4 mb-md-0">
-                            <!-- Placeholder Foto (Admin cukup mengganti src dengan link foto di folder assets/) -->
-                            <div class="bg-light rounded-circle mx-auto d-flex align-items-center justify-content-center shadow-sm" style="width: 220px; height: 220px; border: 5px solid var(--emerald-green);">
-                                <i class="bi bi-person-fill text-secondary" style="font-size: 5rem;"></i>
+                <div class="col-lg-10">
+                    <div class="profile-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-5 text-center mb-5 mb-md-0">
+                                <div class="profile-img-container">
+                                    <img src="assets/uuth 2.webp" alt="Foto Profil Nasfa Uuth Akhmadie" class="profile-img">
+                                    <div class="profile-badge">
+                                        <i class="bi bi-check2-all"></i>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h3 class="fw-bold mb-3">Salam hangat, saya Nasfa Uuth Akhmadie.</h3>
-                            <p class="text-muted" style="line-height: 1.8;">
-                                Biasa dipanggil <strong>Mas Uuth</strong>. Saya tumbuh di lingkungan Pesantren dan terbiasa melihat bahwa perjuangan sejati tidak dimulai dari mimbar pidato, melainkan dari kehadiran nyata di tengah kesulitan warga.
-                            </p>
-                            <p class="text-muted" style="line-height: 1.8;">
-                                Dengan latar belakang sebagai Staf Khusus Ketua DPRD Jawa Timur, pengusaha, serta aktivis sosial-keagamaan (IPNU/GP Ansor), saya mendedikasikan diri untuk mendengar dan melayani Anda.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Kapasitas & Kompetensi -->
-    <section class="container mt-5 pt-4">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <h4 class="fw-bold mb-4 border-bottom pb-2"><i class="bi bi-award-fill text-emerald"></i> Kapasitas & Kompetensi Utama</h4>
-                
-                <div class="row g-4 mb-5">
-                    <div class="col-md-6">
-                        <div class="p-4 bg-white rounded-4 h-100 shadow-sm border border-light">
-                            <h5 class="fw-bold mb-3">Latar Belakang Pendidikan</h5>
-                            <ul class="list-unstyled text-muted">
-                                <li class="mb-3">
-                                    <i class="bi bi-check-circle-fill text-emerald me-2"></i> 
-                                    <strong>S1 Ilmu Administrasi Negara</strong><br>
-                                    <span class="ms-4">STISIP Waskita Darma</span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check-circle-fill text-emerald me-2"></i> 
-                                    <strong>S2 Hukum</strong><br>
-                                    <span class="ms-4">Universitas Sunan Giri Surabaya</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="p-4 bg-white rounded-4 h-100 shadow-sm border border-light">
-                            <h5 class="fw-bold mb-3">Keahlian (Skills)</h5>
-                            <div>
-                                <span class="badge-skill">Analisis Kebijakan Publik</span>
-                                <span class="badge-skill">Perencanaan Strategis</span>
-                                <span class="badge-skill">Public Speaking</span>
-                                <span class="badge-skill">Lobbying & Negosiasi</span>
-                                <span class="badge-skill">Entrepreneurship</span>
-                                <span class="badge-skill">Digital Marketing</span>
+                            <div class="col-md-7 ps-md-4">
+                                <h3 class="fw-bold mb-3 text-emerald">Salam hangat, saya Nasfa Uuth Akhmadie.</h3>
+                                <p class="text-muted" style="line-height: 1.8; font-size: 1.05rem;">
+                                    Biasa dipanggil <strong class="text-dark">Mas Uuth</strong>. Saya tumbuh di lingkungan Pesantren dan terbiasa melihat bahwa perjuangan sejati tidak dimulai dari mimbar pidato, melainkan dari kehadiran nyata di tengah kesulitan warga.
+                                </p>
+                                <p class="text-muted" style="line-height: 1.8; font-size: 1.05rem;">
+                                    Dengan latar belakang sebagai Staf Khusus Ketua DPRD Jawa Timur, pengusaha, serta aktivis sosial-keagamaan (IPNU/GP Ansor), saya mendedikasikan diri untuk mendengar dan melayani Anda.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Tabel Rekam Jejak -->
-                <h4 class="fw-bold mb-4"><i class="bi bi-briefcase-fill text-emerald"></i> Pengalaman Profesional & Organisasi</h4>
-                <div class="table-responsive table-rekam-jejak mb-5">
-                    <table class="table table-borderless mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 30%;">Kategori</th>
-                                <th scope="col" style="width: 70%;">Detail Pengalaman</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Pemerintahan -->
-                            <tr>
-                                <td class="fw-bold text-emerald bg-light"><i class="bi bi-building me-2"></i> Pemerintahan & Kebijakan</td>
-                                <td>
-                                    <ul class="mb-0 text-muted ps-3">
-                                        <li><strong>Staf Khusus Ketua DPRD Jawa Timur</strong> (2024 - Sekarang)</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <!-- Politik -->
-                            <tr>
-                                <td class="fw-bold text-emerald bg-light"><i class="bi bi-people-fill me-2"></i> Politik & Organisasi</td>
-                                <td>
-                                    <ul class="mb-0 text-muted ps-3">
-                                        <li><strong>Ketua DPAC PKB Kec. Rungkut</strong> (2026-2031)</li>
-                                        <li><strong>Wakil Ketua GP Ansor Kota Surabaya</strong> (2025-2029)</li>
-                                        <li><strong>Ketua DKC Garda Bangsa Kota Surabaya</strong> (2022-2025)</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <!-- Wirausaha -->
-                            <tr>
-                                <td class="fw-bold text-emerald bg-light"><i class="bi bi-shop-window me-2"></i> Wirausaha (Entrepreneurship)</td>
-                                <td>
-                                    <ul class="mb-0 text-muted ps-3">
-                                        <li><strong>Founder Manuth Japan</strong> (2025 - Sekarang)</li>
-                                        <li><strong>Business Owner Pasirpedia</strong> (2021-2025)</li>
-                                        <li><strong>Project Manager CV Continuum Bumi Nusantara</strong> (2020-2024)</li>
-                                        <li><strong>Cuci Motor Rukun Konco</strong> (2013-2017)</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Kapasitas & Kompetensi -->
+        <section class="container mt-5 pt-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+                        <h4 class="fw-bold mb-0">Kapasitas & Kompetensi Utama</h4>
+                    </div>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <div class="p-4 bg-white rounded-4 h-100 shadow-sm border border-light" style="border-radius: 16px;">
+                                <h5 class="fw-bold mb-4 text-emerald"><i class="bi bi-mortarboard me-2"></i> Latar Belakang Pendidikan</h5>
+                                <ul class="list-unstyled text-muted">
+                                    <li class="mb-4">
+                                        <div class="d-flex">
+                                            <i class="bi bi-check-circle-fill text-gold me-3 fs-5"></i>
+                                            <div>
+                                                <strong class="text-dark d-block" style="font-family: 'Satoshi', sans-serif;">S1 Ilmu Administrasi Negara</strong>
+                                                <span class="small">STISIP Waskita Darma</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex">
+                                            <i class="bi bi-check-circle-fill text-gold me-3 fs-5"></i>
+                                            <div>
+                                                <strong class="text-dark d-block" style="font-family: 'Satoshi', sans-serif;">S2 Hukum</strong>
+                                                <span class="small">Universitas Sunan Giri Surabaya</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-4 bg-white rounded-4 h-100 shadow-sm border border-light" style="border-radius: 16px;">
+                                <h5 class="fw-bold mb-4 text-emerald"><i class="bi bi-lightning-charge me-2"></i> Keahlian (Skills)</h5>
+                                <div class="mt-2">
+                                    <span class="badge-skill">Analisis Kebijakan Publik</span>
+                                    <span class="badge-skill">Perencanaan Strategis</span>
+                                    <span class="badge-skill">Public Speaking</span>
+                                    <span class="badge-skill">Lobbying & Negosiasi</span>
+                                    <span class="badge-skill">Entrepreneurship</span>
+                                    <span class="badge-skill">Digital Marketing</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Rekam Jejak -->
+                    <div class="d-flex align-items-center mb-4 mt-5">
+                        <h4 class="fw-bold mb-0">Pengalaman Profesional & Organisasi</h4>
+                    </div>
+                    <div class="table-responsive table-rekam-jejak mb-5">
+                        <table class="table table-borderless mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 35%;">Kategori</th>
+                                    <th scope="col" style="width: 65%;">Detail Pengalaman</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold text-emerald" style="background-color: rgba(80, 200, 120, 0.05); border-right: 1px solid #f0f0f0;">
+                                        <i class="bi bi-building me-2"></i> Pemerintahan & Kebijakan
+                                    </td>
+                                    <td>
+                                        <ul class="mb-0 text-muted ps-3 py-2" style="line-height: 1.7;">
+                                            <li><strong class="text-dark">Staf Khusus Ketua DPRD Jawa Timur</strong> (2024 - Sekarang)</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-emerald" style="background-color: rgba(80, 200, 120, 0.05); border-right: 1px solid #f0f0f0;">
+                                        <i class="bi bi-people-fill me-2"></i> Politik & Organisasi
+                                    </td>
+                                    <td>
+                                        <ul class="mb-0 text-muted ps-3 py-2" style="line-height: 1.7;">
+                                            <li><strong class="text-dark">Ketua DPAC PKB Kec. Rungkut</strong> (2026-2031)</li>
+                                            <li><strong class="text-dark">Wakil Ketua GP Ansor Kota Surabaya</strong> (2025-2029)</li>
+                                            <li><strong class="text-dark">Ketua DKC Garda Bangsa Kota Surabaya</strong> (2022-2025)</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-emerald" style="background-color: rgba(80, 200, 120, 0.05); border-right: 1px solid #f0f0f0;">
+                                        <i class="bi bi-shop-window me-2"></i> Wirausaha
+                                    </td>
+                                    <td>
+                                        <ul class="mb-0 text-muted ps-3 py-2" style="line-height: 1.7;">
+                                            <li><strong class="text-dark">Founder Manuth Japan</strong> (2025 - Sekarang)</li>
+                                            <li><strong class="text-dark">Business Owner Pasirpedia</strong> (2021-2025)</li>
+                                            <li><strong class="text-dark">Project Manager CV Continuum Bumi Nusantara</strong> (2020-2024)</li>
+                                            <li><strong class="text-dark">Cuci Motor Rukun Konco</strong> (2013-2017)</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-white py-4 mt-5 border-top text-center">
+    <footer class="bg-white py-4 mt-auto border-top text-center">
         <div class="container text-muted">
-            <p class="mb-0 fw-medium">&copy; 2026 Nasfa Uuth Akhmadie (Mas Uuth). Hadir untuk Mendengar, Bergerak untuk Melayani.</p>
+            <p class="mb-0 fw-medium" style="font-size: 0.95rem;">&copy; 2026 Nasfa Uuth Akhmadie (Mas Uuth). Hadir untuk Mendengar, Bergerak untuk Melayani.</p>
         </div>
     </footer>
 
