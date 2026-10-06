@@ -5,90 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jurnal & Berita - Mas Uuth</title>
     
+    <link rel="icon" type="image/webp" sizes="32x32" href="assets/favicon-32.webp">
+    <link rel="icon" type="image/webp" sizes="512x512" href="assets/favicon-512.webp">
+    <link rel="apple-touch-icon" href="assets/favicon-512.webp">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style>
-        :root {
-            --emerald-green: #50C878;
-            --emerald-dark: #3fa160;
-            --warm-gold: #FFB703;
-            --clean-slate: #FFFFFF;
-            --slate-grey-light: #F5F5F5;
-            --slate-grey-dark: #333333;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--slate-grey-light);
-            color: var(--slate-grey-dark);
-            -webkit-font-smoothing: antialiased;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        h1, h2, h3, h4, h5, h6 { font-family: 'Satoshi', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
-        .text-emerald { color: var(--emerald-green); }
-
-        /* Navbar */
-        .navbar { background-color: var(--clean-slate); border-bottom: 1px solid rgba(0,0,0,0.03); }
-        .nav-link { font-family: 'Satoshi', sans-serif; font-weight: 600; color: var(--slate-grey-dark); transition: 0.3s; font-size: 1.05rem; }
-        .nav-link:hover, .nav-link.active { color: var(--emerald-green); }
-
-        .btn-primary-custom {
-            background-color: var(--emerald-green); color: var(--clean-slate);
-            font-family: 'Satoshi', sans-serif; border: none; padding: 12px 30px;
-            border-radius: 50px; font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 20px rgba(80, 200, 120, 0.25); font-size: 1.05rem;
-        }
-        .btn-primary-custom:hover { background-color: var(--emerald-dark); color: var(--clean-slate); transform: translateY(-3px); }
-
-        /* Card Berita Premium */
-        .karya-card {
-            border: 1px solid rgba(0,0,0,0.02);
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
-            background-color: var(--clean-slate);
-            height: 100%;
-            padding: 2.2rem;
-            position: relative;
-        }
-        .karya-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(80, 200, 120, 0.1); }
-        .karya-badge {
-            background-color: rgba(80, 200, 120, 0.1); color: var(--emerald-dark);
-            font-family: 'Satoshi', sans-serif;
-            font-size: 0.85rem; padding: 6px 16px; border-radius: 50px; font-weight: 700;
-            border: 1px solid rgba(80, 200, 120, 0.2);
-        }
-        
-        /* Floating Buttons Premium */
-        .floating-controls {
-            position: fixed; bottom: 35px; right: 35px;
-            z-index: 1050; display: flex; flex-direction: column; gap: 12px;
-        }
-        .btn-float {
-            font-family: 'Satoshi', sans-serif;
-            border-radius: 50px; padding: 12px 24px; font-weight: 700;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: none; font-size: 0.95rem; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-float:hover { transform: translateY(-3px); }
-        .btn-refresh { background-color: var(--emerald-green); color: white; }
-        .btn-refresh:hover { background-color: var(--emerald-dark); color: white; box-shadow: 0 12px 30px rgba(80, 200, 120, 0.3); }
-        .btn-clear { background-color: var(--slate-grey-dark); color: white; }
-        .btn-clear:hover { background-color: #1a1a1a; color: white; }
-        
-        main { flex: 1; padding-bottom: 80px; }
-    </style>
+    
+    <!-- Memanggil Universal Stylesheet -->
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-    <!-- Navigasi -->
     <nav class="navbar navbar-expand-lg py-3 sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.html">
@@ -99,18 +28,10 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav gap-3 align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Profil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="program.html">Program & Layanan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="berita-karya.html">Jurnal</a>
-                    </li>
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <a href="program.html#layanan-cepat" class="btn btn-primary-custom">Hubungi Kami</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Profil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="program.html">Program & Layanan</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="berita-karya.html">Jurnal</a></li>
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0"><a href="program.html#layanan-cepat" class="btn btn-primary-custom">Hubungi Kami</a></li>
                 </ul>
             </div>
         </div>
@@ -124,9 +45,7 @@
             </p>
         </div>
 
-        <!-- Kontainer Data Dinamis -->
         <div id="berita-container" class="row g-4">
-            <!-- Skeleton/Loading -->
             <div class="col-12 text-center py-5" id="loading-indicator">
                 <div class="spinner-grow text-emerald mb-4" role="status" style="width: 4rem; height: 4rem; opacity: 0.8;">
                     <span class="visually-hidden">Loading...</span>
@@ -136,31 +55,24 @@
         </div>
     </main>
 
-    <!-- Tombol Manajemen Halaman -->
     <div class="floating-controls">
         <button onclick="refreshData()" class="btn-float btn-refresh"><i class="bi bi-arrow-clockwise me-2"></i> Refresh Data</button>
-        <button onclick="clearCacheData()" class="btn-float btn-clear"><i class="bi bi-trash3-fill me-2"></i> Clear Cache</button>
+        <button onclick="clearCacheAndRefresh()" class="btn-float btn-clear"><i class="bi bi-trash3-fill me-2"></i> Clear Cache</button>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-white py-4 mt-auto border-top text-center">
         <div class="container text-muted">
             <p class="mb-0 fw-medium" style="font-size: 0.95rem;">&copy; 2026 Nasfa Uuth Akhmadie (Mas Uuth). Hadir untuk Mendengar, Bergerak untuk Melayani.</p>
         </div>
     </footer>
 
-    <!-- Fetch Logic & Caching API -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/app.js"></script>
+
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxOo_Z8IPxSXYgvuyxBna8ZEjGx0GLUJl2orrjaDtJZePRGmSMNYVatvXWbpLljQyzYNg/exec'; 
         const CACHE_KEY = 'mas_uuth_berita_data';
         const CACHE_TIMESTAMP_KEY = 'mas_uuth_berita_timestamp';
         const TTL_MS = 15 * 60 * 1000; // 15 Menit
-
-        const Toast = Swal.mixin({
-            toast: true, position: 'bottom-end', showConfirmButton: false,
-            timer: 3500, timerProgressBar: true, background: '#ffffff', color: '#333333',
-            customClass: { title: 'fw-bold' }
-        });
 
         document.addEventListener("DOMContentLoaded", () => { initDataFetch(); });
 
@@ -168,6 +80,8 @@
             const cachedData = localStorage.getItem(CACHE_KEY);
             const cachedTime = localStorage.getItem(CACHE_TIMESTAMP_KEY);
             const now = new Date().getTime();
+            
+            const Toast = Swal.mixin({ toast: true, position: 'bottom-end', showConfirmButton: false, timer: 3500, timerProgressBar: true, background: '#ffffff', color: '#333333', customClass: { title: 'fw-bold' }});
 
             if (cachedData && cachedTime && (now - parseInt(cachedTime) < TTL_MS)) {
                 renderBerita(JSON.parse(cachedData));
@@ -177,7 +91,8 @@
             Toast.fire({ icon: 'info', title: 'Menarik data terbaru dari server...' });
 
             try {
-                const response = await fetch(API_URL);
+                // scriptURL dari app.js
+                const response = await fetch(scriptURL);
                 if (!response.ok) throw new Error('Network response failed');
                 
                 const data = await response.json();
@@ -192,10 +107,10 @@
                 } else {
                     document.getElementById('loading-indicator').style.display = 'none';
                     Swal.fire({
+                        ...swalConfig, 
                         title: 'Koneksi Terputus',
                         text: 'Gagal memuat data dari server. Silakan coba lagi.',
                         icon: 'error',
-                        confirmButtonColor: '#50C878',
                         confirmButtonText: 'Coba Lagi'
                     }).then((result) => { if (result.isConfirmed) refreshData(); });
                 }
@@ -237,16 +152,6 @@
                 container.insertAdjacentHTML('beforeend', cardHTML);
             });
         }
-
-        function refreshData() { window.location.reload(true); }
-        function clearCacheData() {
-            localStorage.clear();
-            sessionStorage.clear();
-            Toast.fire({
-                icon: 'success', title: 'Sistem dibersihkan. Memuat ulang...', timer: 1500
-            }).then(() => { window.location.reload(true); });
-        }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

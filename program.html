@@ -5,138 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Program & Layanan - Mas Uuth</title>
     
+    <link rel="icon" type="image/webp" sizes="32x32" href="assets/favicon-32.webp">
+    <link rel="icon" type="image/webp" sizes="512x512" href="assets/favicon-512.webp">
+    <link rel="apple-touch-icon" href="assets/favicon-512.webp">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style>
-        :root {
-            --emerald-green: #50C878;
-            --emerald-dark: #3fa160;
-            --warm-gold: #FFB703;
-            --warm-gold-dark: #e6a502;
-            --clean-slate: #FFFFFF;
-            --slate-grey-light: #F5F5F5;
-            --slate-grey-dark: #333333;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--slate-grey-light);
-            color: var(--slate-grey-dark);
-            -webkit-font-smoothing: antialiased;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        h1, h2, h3, h4, h5, h6 { font-family: 'Satoshi', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
-        .text-emerald { color: var(--emerald-green); }
-        .text-gold { color: var(--warm-gold); }
-
-        /* Navbar (Konsisten) */
-        .navbar { background-color: var(--clean-slate); border-bottom: 1px solid rgba(0,0,0,0.03); }
-        .nav-link { font-family: 'Satoshi', sans-serif; font-weight: 600; color: var(--slate-grey-dark); transition: 0.3s; font-size: 1.05rem; }
-        .nav-link:hover, .nav-link.active { color: var(--emerald-green); }
-
-        .btn-primary-custom {
-            background-color: var(--emerald-green);
-            color: var(--clean-slate);
-            font-family: 'Satoshi', sans-serif;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 20px rgba(80, 200, 120, 0.25);
-            font-size: 1.05rem;
-        }
-        .btn-primary-custom:hover { background-color: var(--emerald-dark); color: var(--clean-slate); transform: translateY(-3px); }
-
-        /* Card Program Unggulan Premium */
-        .program-card {
-            border: 1px solid rgba(0,0,0,0.02);
-            border-radius: 20px;
-            background-color: var(--clean-slate);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
-            height: 100%;
-            padding: 2.5rem 2rem;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .program-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--emerald-green), var(--warm-gold));
-            opacity: 0; transition: opacity 0.3s ease;
-        }
-        .program-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(80, 200, 120, 0.12); }
-        .program-card:hover::before { opacity: 1; }
-        
-        .program-icon-wrapper {
-            width: 70px; height: 70px;
-            background-color: rgba(80, 200, 120, 0.08);
-            color: var(--emerald-green);
-            border-radius: 18px; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; margin-bottom: 1.8rem;
-            border: 1px solid rgba(80, 200, 120, 0.15);
-        }
-
-        /* Container Layanan WA */
-        .layanan-container {
-            background-color: var(--clean-slate);
-            border-radius: 24px; padding: 4rem 3rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
-            margin-top: 5rem; margin-bottom: 5rem;
-            border: 1px solid rgba(0,0,0,0.02);
-            position: relative;
-            overflow: hidden;
-        }
-        /* Aksen dekoratif pada container layanan */
-        .layanan-container::after {
-            content: "\F64C"; /* Bootstrap icon WhatsApp code */
-            font-family: "bootstrap-icons";
-            position: absolute;
-            right: -50px;
-            bottom: -50px;
-            font-size: 250px;
-            color: rgba(80, 200, 120, 0.03);
-            z-index: 0;
-            pointer-events: none;
-        }
-        .layanan-content { position: relative; z-index: 1; }
-
-        .btn-wa {
-            font-family: 'Satoshi', sans-serif;
-            border-radius: 50px; padding: 16px 24px;
-            font-weight: 700; font-size: 1.1rem;
-            display: flex; align-items: center; justify-content: center;
-            gap: 12px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: none;
-            color: var(--clean-slate); width: 100%; text-decoration: none;
-            position: relative; overflow: hidden;
-        }
-        .btn-wa:hover { transform: translateY(-5px); color: var(--clean-slate); }
-        
-        .btn-ambulance { background-color: var(--emerald-green); box-shadow: 0 10px 25px rgba(80,200,120,0.3); }
-        .btn-ambulance:hover { background-color: var(--emerald-dark); box-shadow: 0 15px 35px rgba(80,200,120,0.4); }
-        
-        .btn-hiace { background-color: var(--warm-gold); color: var(--slate-grey-dark); box-shadow: 0 10px 25px rgba(255,183,3,0.3); }
-        .btn-hiace:hover { background-color: var(--warm-gold-dark); color: var(--slate-grey-dark); box-shadow: 0 15px 35px rgba(255,183,3,0.4); }
-        
-        .btn-kolaborasi { background-color: var(--slate-grey-dark); box-shadow: 0 10px 25px rgba(51,51,51,0.25); }
-        .btn-kolaborasi:hover { background-color: #1a1a1a; box-shadow: 0 15px 35px rgba(51,51,51,0.35); }
-        
-        main { flex: 1; }
-    </style>
+    
+    <!-- Memanggil Universal Stylesheet -->
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-    <!-- Navigasi -->
     <nav class="navbar navbar-expand-lg py-3 sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.html">
@@ -147,25 +28,16 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav gap-3 align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Profil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="program.html">Program & Layanan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="berita-karya.html">Jurnal</a>
-                    </li>
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <a href="program.html#layanan-cepat" class="btn btn-primary-custom">Hubungi Kami</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Profil</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="program.html">Program & Layanan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="berita-karya.html">Jurnal</a></li>
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0"><a href="program.html#layanan-cepat" class="btn btn-primary-custom">Hubungi Kami</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <main class="container mt-5 pt-3">
-        <!-- Header Section -->
         <div class="text-center mb-5 pb-3">
             <h1 class="fw-bold text-emerald mb-3" style="font-size: 3rem;">Fokus Pengabdian</h1>
             <p class="text-muted mx-auto" style="max-width: 700px; font-size: 1.15rem; line-height: 1.8;">
@@ -173,65 +45,44 @@
             </p>
         </div>
 
-        <!-- 5 Program Unggulan Grid -->
         <div class="row g-4">
-            <!-- 1. Ambulance -->
             <div class="col-md-6 col-lg-4">
                 <div class="program-card">
-                    <div class="program-icon-wrapper">
-                        <i class="bi bi-heart-pulse-fill"></i>
-                    </div>
+                    <div class="program-icon-wrapper"><i class="bi bi-heart-pulse-fill"></i></div>
                     <h5 class="fw-bold mb-3">Layanan Ambulance</h5>
                     <p class="text-muted" style="font-size: 1rem; line-height: 1.6;">Bantuan darurat transportasi kesehatan bagi warga yang membutuhkan dengan respons cepat ke fasilitas medis terdekat.</p>
                 </div>
             </div>
-
-            <!-- 2. Hiace / Bus -->
             <div class="col-md-6 col-lg-4">
                 <div class="program-card">
-                    <div class="program-icon-wrapper text-gold" style="background-color: rgba(255, 183, 3, 0.08); border-color: rgba(255, 183, 3, 0.15);">
-                        <i class="bi bi-bus-front-fill"></i>
-                    </div>
+                    <div class="program-icon-wrapper text-gold" style="background-color: rgba(255, 183, 3, 0.08); border-color: rgba(255, 183, 3, 0.15);"><i class="bi bi-bus-front-fill"></i></div>
                     <h5 class="fw-bold mb-3">Layanan Hiace & Bus</h5>
                     <p class="text-muted" style="font-size: 1rem; line-height: 1.6;">Fasilitas mobilitas komunal warga untuk menunjang kegiatan sosial, keagamaan, ziarah, maupun keperluan bersama lainnya.</p>
                 </div>
             </div>
-
-            <!-- 3. Advokasi Siswa -->
             <div class="col-md-6 col-lg-4">
                 <div class="program-card">
-                    <div class="program-icon-wrapper text-primary" style="background-color: rgba(13, 110, 253, 0.08); border-color: rgba(13, 110, 253, 0.15);">
-                        <i class="bi bi-mortarboard-fill"></i>
-                    </div>
+                    <div class="program-icon-wrapper text-primary" style="background-color: rgba(13, 110, 253, 0.08); border-color: rgba(13, 110, 253, 0.15);"><i class="bi bi-mortarboard-fill"></i></div>
                     <h5 class="fw-bold mb-3">Advokasi Pendidikan</h5>
                     <p class="text-muted" style="font-size: 1rem; line-height: 1.6;">Mengawal hak-hak pendidikan siswa SD-SMA agar tepat sasaran dan memastikan akses merata tanpa dipersulit birokrasi.</p>
                 </div>
             </div>
-
-            <!-- 4. Penguatan UMKM -->
             <div class="col-md-6 col-lg-6">
                 <div class="program-card">
-                    <div class="program-icon-wrapper" style="color: #20c997; background-color: rgba(32, 201, 151, 0.08); border-color: rgba(32, 201, 151, 0.15);">
-                        <i class="bi bi-shop"></i>
-                    </div>
+                    <div class="program-icon-wrapper" style="color: #20c997; background-color: rgba(32, 201, 151, 0.08); border-color: rgba(32, 201, 151, 0.15);"><i class="bi bi-shop"></i></div>
                     <h5 class="fw-bold mb-3">Penguatan UMKM</h5>
                     <p class="text-muted" style="font-size: 1rem; line-height: 1.6;">Pemberdayaan ekonomi warga melalui mentoring bisnis terstruktur dan pemanfaatan digital marketing, diinkubasi langsung dari pengalaman nyata Mas Uuth sebagai wirausahawan.</p>
                 </div>
             </div>
-
-            <!-- 5. Kolaborasi Fraksi PKB -->
             <div class="col-md-6 col-lg-6">
                 <div class="program-card">
-                    <div class="program-icon-wrapper text-danger" style="background-color: rgba(220, 53, 69, 0.08); border-color: rgba(220, 53, 69, 0.15);">
-                        <i class="bi bi-diagram-3-fill"></i>
-                    </div>
+                    <div class="program-icon-wrapper text-danger" style="background-color: rgba(220, 53, 69, 0.08); border-color: rgba(220, 53, 69, 0.15);"><i class="bi bi-diagram-3-fill"></i></div>
                     <h5 class="fw-bold mb-3">Sinergi Parlemen</h5>
                     <p class="text-muted" style="font-size: 1rem; line-height: 1.6;">Menjembatani aspirasi akar rumput. Kolaborasi aktif dengan program DPRD Fraksi PKB dari tingkat Kota hingga Pusat untuk memberikan eksekusi kebijakan yang terarah dan nyata.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Layanan Cepat Terintegrasi WhatsApp -->
         <div class="layanan-container" id="layanan-cepat">
             <div class="layanan-content">
                 <div class="text-center mb-5">
@@ -246,29 +97,19 @@
 
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4">
-                        <a href="https://wa.me/6281339760265?text=%F0%9F%92%9A+*ORDER+AMBULANCE*+%F0%9F%92%9A%0ANama+Pemesan+:+...%0ANo.+HP+++:+...%0A%0A%F0%9F%91%87%F0%9F%8F%BD+++%F0%9F%91%87%F0%9F%8F%BD+++%F0%9F%91%87%F0%9F%8F%BD%0A%0AHari/tanggal+++:+...%0AJam+Jemput+++:+...%0ADari/alamat+++:+...%0ATujuan+Lengkap+++:+...%0ANama+Pasien/Janazah+:+...%0A%0A%E2%80%BC%EF%B8%8F+*Catatan+:+Kami+menyediakan+AMBULANCE,+nanti+ada+biaya+BBM+dan+Supir*.+Tolong+di+komunikasikan+Nggih.+%F0%9F%99%8F%F0%9F%8F%BD" 
-                           class="btn-wa btn-ambulance wa-link" target="_blank" data-service="Ambulance">
-                            <i class="bi bi-hospital fs-4"></i> Pesan Ambulance
-                        </a>
+                        <a href="https://wa.me/6281339760265?text=%F0%9F%92%9A+*ORDER+AMBULANCE*+%F0%9F%92%9A%0ANama+Pemesan+:+...%0ANo.+HP+++:+...%0A%0A%F0%9F%91%87%F0%9F%8F%BD+++%F0%9F%91%87%F0%9F%8F%BD+++%F0%9F%91%87%F0%9F%8F%BD%0A%0AHari/tanggal+++:+...%0AJam+Jemput+++:+...%0ADari/alamat+++:+...%0ATujuan+Lengkap+++:+...%0ANama+Pasien/Janazah+:+...%0A%0A%E2%80%BC%EF%B8%8F+*Catatan+:+Kami+menyediakan+AMBULANCE,+nanti+ada+biaya+BBM+dan+Supir*.+Tolong+di+komunikasikan+Nggih.+%F0%9F%99%8F%F0%9F%8F%BD" class="btn-wa btn-ambulance wa-link" target="_blank" data-service="Ambulance"><i class="bi bi-hospital fs-4"></i> Pesan Ambulance</a>
                     </div>
                     <div class="col-md-4">
-                        <a href="https://wa.me/6281339760265?text=%F0%9F%92%9A+*ORDER+BUS/HIACE*+%F0%9F%92%9A%0AType+Kendaran+:+Hiace+/+Bus+(silahkan+di+isi)%0ATanggal+:+...%0AJam+:+...%0ATitik+Kumpul+:+...%0ATujuan+:+...%0APenanggung+Jawab+:+...%0AHP+Penanggung+Jawab+:+...%0A%0A%E2%80%BC%EF%B8%8F+*Catatan*+:+Kami+menyediakan+*Bus+atau+Hiace+saja*,+nanti+ada+*biaya+BBM+dan+Supir*.+Tol+ditanggung+Penyewa+%F0%9F%99%8F%F0%9F%8F%BD" 
-                           class="btn-wa btn-hiace wa-link" target="_blank" data-service="Bus/Hiace">
-                            <i class="bi bi-bus-front fs-4"></i> Pesan Bus / Hiace
-                        </a>
+                        <a href="https://wa.me/6281339760265?text=%F0%9F%92%9A+*ORDER+BUS/HIACE*+%F0%9F%92%9A%0AType+Kendaran+:+Hiace+/+Bus+(silahkan+di+isi)%0ATanggal+:+...%0AJam+:+...%0ATitik+Kumpul+:+...%0ATujuan+:+...%0APenanggung+Jawab+:+...%0AHP+Penanggung+Jawab+:+...%0A%0A%E2%80%BC%EF%B8%8F+*Catatan*+:+Kami+menyediakan+*Bus+atau+Hiace+saja*,+nanti+ada+*biaya+BBM+dan+Supir*.+Tol+ditanggung+Penyewa+%F0%9F%99%8F%F0%9F%8F%BD" class="btn-wa btn-hiace wa-link" target="_blank" data-service="Bus/Hiace"><i class="bi bi-bus-front fs-4"></i> Pesan Bus / Hiace</a>
                     </div>
                     <div class="col-md-4">
-                        <a href="https://wa.me/6281339760265?text=Selamat+Pagi.+mas+Uuth.+%F0%9F%99%8F%F0%9F%8F%BD%0A%0ASaya+%5B+Nama+%5D,+izin+menguhubungi+Mas+untuk+diskusi+tentang+Politik+dan+Sosial+yang+ada+di+Surabaya.%0A%0AJika+ada+waktu,+mungkin+bisa+dibalas.%0AMakasih,+salam+sehat+selalu.+%F0%9F%99%8F%F0%9F%8F%BD" 
-                           class="btn-wa btn-kolaborasi wa-link" target="_blank" data-service="Kolaborasi">
-                            <i class="bi bi-chat-dots fs-4"></i> Ruang Diskusi
-                        </a>
+                        <a href="https://wa.me/6281339760265?text=Selamat+Pagi.+mas+Uuth.+%F0%9F%99%8F%F0%9F%8F%BD%0A%0ASaya+%5B+Nama+%5D,+izin+menguhubungi+Mas+untuk+diskusi+tentang+Politik+dan+Sosial+yang+ada+di+Surabaya.%0A%0AJika+ada+waktu,+mungkin+bisa+dibalas.%0AMakasih,+salam+sehat+selalu.+%F0%9F%99%8F%F0%9F%8F%BD" class="btn-wa btn-kolaborasi wa-link" target="_blank" data-service="Kolaborasi"><i class="bi bi-chat-dots fs-4"></i> Ruang Diskusi</a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-white py-4 mt-auto border-top text-center">
         <div class="container text-muted">
             <p class="mb-0 fw-medium" style="font-size: 0.95rem;">&copy; 2026 Nasfa Uuth Akhmadie (Mas Uuth). Hadir untuk Mendengar, Bergerak untuk Melayani.</p>
@@ -276,45 +117,15 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/app.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const Toast = Swal.mixin({
-                toast: true, position: 'top-end', showConfirmButton: false,
-                timer: 3000, timerProgressBar: true, background: '#ffffff', color: '#333333'
-            });
-
-            const waLinks = document.querySelectorAll('.wa-link');
-            waLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const serviceName = this.getAttribute('data-service');
-                    Toast.fire({ icon: 'success', title: `Menuju WhatsApp Admin untuk ${serviceName}...` });
+            const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true, background: '#ffffff', color: '#333333' });
+            document.querySelectorAll('.wa-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    Toast.fire({ icon: 'success', title: `Menuju WhatsApp Admin untuk ${this.getAttribute('data-service')}...` });
                 });
-            });
-
-            // History Trap Logic
-            history.pushState({ trap: true }, null, document.URL);
-            let trapTriggered = false; 
-
-            window.addEventListener('popstate', function(event) {
-                if (!trapTriggered) {
-                    history.pushState({ trap: true }, null, document.URL); 
-                    Swal.fire({
-                        title: 'Tunggu Sebentar!',
-                        text: 'Apakah Anda yakin ingin meninggalkan halaman layanan ini?',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#50C878', 
-                        cancelButtonColor: '#333333', 
-                        confirmButtonText: 'Ya, Keluar',
-                        cancelButtonText: 'Batal',
-                        backdrop: `rgba(51, 51, 51, 0.6)`
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            trapTriggered = true; 
-                            history.back(); 
-                        }
-                    });
-                }
             });
         });
     </script>
