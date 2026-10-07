@@ -11,17 +11,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <!-- Quill.js CSS untuk Editor Rich Text -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    
-    <!-- Universal Stylesheet -->
     <link rel="stylesheet" href="assets/style.css">
 
-    <!-- CSS Tambahan Khusus -->
     <style>
         .karya-card { display: flex; flex-direction: column; padding: 0 !important; overflow: hidden; }
         .karya-img-wrapper { width: 100%; height: 200px; overflow: hidden; background-color: var(--slate-grey-light); border-bottom: 1px solid rgba(0,0,0,0.05); }
@@ -34,27 +27,22 @@
         
         .swal2-html-container { margin: 0 !important; overflow-x: hidden; }
         .artikel-modal-content { font-family: 'Poppins', sans-serif; text-align: left; padding-top: 10px; }
-        .artikel-modal-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .artikel-modal-midimg { width: 100%; max-height: 350px; object-fit: cover; border-radius: 12px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .artikel-modal-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); background-color: #f8f9fa; }
+        .artikel-modal-midimg { width: 100%; max-height: 350px; object-fit: cover; border-radius: 12px; margin: 30px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: block; background-color: #f8f9fa;}
         
         .artikel-modal-text { font-size: 1.05rem; line-height: 1.9; color: var(--slate-grey-dark); text-align: justify; }
         .artikel-modal-text p { margin-bottom: 1.5rem; text-align: justify; }
         .artikel-modal-text h2, .artikel-modal-text h3 { color: var(--emerald-green); margin-top: 1.5rem; margin-bottom: 1rem; }
 
         #secret-door { cursor: default; user-select: none; } 
-        
-        /* FIX: Mutlak menempatkan Pop-up SweetAlert2 di atas segalanya */
         .swal2-container { z-index: 99999 !important; }
         
         #cms-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background-color: var(--slate-grey-light); z-index: 1040;
+            background-color: rgba(51, 51, 51, 0.8); z-index: 1040; /* Disesuaikan dengan Vibe Slate Grey Elegan */
             display: none; overflow-y: auto; padding: 40px 20px;
         }
-        .cms-container {
-            max-width: 900px; margin: 0 auto; background: var(--clean-slate);
-            padding: 40px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-        }
+        .cms-container { max-width: 900px; margin: 0 auto; background: var(--clean-slate); padding: 40px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
         .cms-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; margin-bottom: 30px; }
         #quill-editor { height: 400px; font-family: 'Poppins', sans-serif; font-size: 1.05rem; }
         .ql-editor p { text-align: justify; } 
@@ -101,10 +89,10 @@
 
     <div class="floating-controls">
         <button id="btn-refresh-global" class="btn-float btn-refresh"><i class="bi bi-arrow-clockwise me-2"></i> Refresh Data</button>
-        <button id="btn-clear-global" class="btn-float btn-clear"><i class="bi bi-trash3-fill me-2"></i> Clear Cache</button>
+        <button id="btn-clear-global" class="btn-float btn-clear" style="background-color: #333333;"><i class="bi bi-trash3-fill me-2"></i> Clear Cache</button>
     </div>
 
-    <!-- CMS OVERLAY RAHASIA -->
+    <!-- CMS OVERLAY -->
     <div id="cms-overlay">
         <div class="cms-container">
             <div class="cms-header">
@@ -135,7 +123,7 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold text-emerald"><i class="bi bi-image"></i> Gambar Midline (Opsional)</label>
                         <input type="file" id="cms-img-midline" accept="image/*" class="form-control" style="padding: 10px;">
-                        <small class="text-muted">Gambar tambahan di tengah/akhir artikel.</small>
+                        <small class="text-muted">Gambar tambahan di tengah artikel.</small>
                     </div>
 
                     <div class="col-12 mt-4">
@@ -144,7 +132,6 @@
                     </div>
 
                     <div class="col-12 mt-5 pt-3 border-top d-flex gap-3 justify-content-end">
-                        <!-- FIX: Menggunakan tipe button tanpa atribut onclick, diikat via JS EventListener -->
                         <button type="button" id="btn-preview" class="btn btn-secondary-custom"><i class="bi bi-eye"></i> Preview</button>
                         <button type="button" id="btn-draft" class="btn btn-secondary-custom bg-dark text-white border-dark"><i class="bi bi-save"></i> Simpan Draft</button>
                         <button type="button" id="btn-publish" class="btn btn-primary-custom"><i class="bi bi-send-check"></i> Terbitkan (Publish)</button>
@@ -165,53 +152,58 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
     <script>
-        // ==========================================
-        // KONFIGURASI ABSOLUT
-        // ==========================================
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxOo_Z8IPxSXYgvuyxBna8ZEjGx0GLUJl2orrjaDtJZePRGmSMNYVatvXWbpLljQyzYNg/exec';
         const CACHE_KEY = 'mas_uuth_berita_data';
         const CACHE_TIMESTAMP_KEY = 'mas_uuth_berita_timestamp';
         const TTL_MS = 15 * 60 * 1000;
 
-        // Custom config SweetAlert agar terlepas dari app.js
+        // PENYESUAIAN BRAND IDENTITY UI (Clean, Emerald, & Slate Grey)
         const cmsSwal = {
-            backdrop: 'rgba(51, 51, 51, 0.8)',
-            borderRadius: '20px',
-            confirmButtonColor: '#50C878',
-            cancelButtonColor: '#333333',
-            customClass: { popup: 'rounded-4', title: 'fw-bold' }
+            backdrop: 'rgba(51, 51, 51, 0.7)',
+            borderRadius: '24px',
+            confirmButtonColor: '#50C878', // Emerald Green
+            cancelButtonColor: '#333333',  // Slate Grey
+            color: '#333333',
+            background: '#FFFFFF',
+            customClass: { popup: 'shadow-lg border-0', title: 'fw-bold' }
         };
 
-        let quill; // Variabel Editor Teks
+        let quill;
+
+        function formatTanggal(rawDate) {
+            if (!rawDate || rawDate === '-') return '-';
+            const dateObj = new Date(rawDate);
+            if (isNaN(dateObj)) return rawDate; 
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+            return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+        }
+
+        function convertDriveUrl(url) {
+            if (!url) return null;
+            const idMatch = url.match(/id=([a-zA-Z0-9_-]+)/);
+            if (idMatch && idMatch[1]) return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=s2000`; 
+            return url;
+        }
 
         document.addEventListener("DOMContentLoaded", () => { 
             initDataFetch(); 
-            initCMSBindings(); // Inisiasi Tombol Secara Kokoh
+            initCMSBindings();
         });
 
-        // ==========================================
-        // 1. EVENT BINDINGS (PENGGANTI ONCLICK)
-        // ==========================================
         function initCMSBindings() {
-            // Pintu Rahasia & Tutup
             document.getElementById('secret-door').addEventListener('click', openCMS);
             document.getElementById('btn-close-cms').addEventListener('click', closeCMS);
-
-            // Tombol Refresh/Clear Halaman Utama
-            document.getElementById('btn-refresh-global').addEventListener('click', () => window.location.reload(true));
+            document.getElementById('btn-refresh-global').addEventListener('click', () => {
+                localStorage.clear(); sessionStorage.clear(); window.location.reload(true);
+            });
             document.getElementById('btn-clear-global').addEventListener('click', () => {
                 localStorage.clear(); sessionStorage.clear(); window.location.reload(true);
             });
-
-            // Tombol Eksekusi Berita (Pusat Masalah Sebelumnya)
             document.getElementById('btn-preview').addEventListener('click', previewCMS);
             document.getElementById('btn-draft').addEventListener('click', () => submitCMS('Draft'));
             document.getElementById('btn-publish').addEventListener('click', () => submitCMS('Publish'));
         }
 
-        // ==========================================
-        // 2. FETCH & RENDER BERITA (FRONTEND)
-        // ==========================================
         async function initDataFetch() {
             const cachedData = localStorage.getItem(CACHE_KEY);
             const cachedTime = localStorage.getItem(CACHE_TIMESTAMP_KEY);
@@ -228,7 +220,6 @@
             try {
                 const response = await fetch(WEB_APP_URL);
                 if (!response.ok) throw new Error('Network response failed');
-                
                 const data = await response.json();
                 localStorage.setItem(CACHE_KEY, JSON.stringify(data));
                 localStorage.setItem(CACHE_TIMESTAMP_KEY, now.toString());
@@ -265,14 +256,17 @@
                 if (!item.Judul || item.Judul.toString().trim() === '') return;
                 
                 const kategori = item.Kategori || 'Jurnal';
-                const tanggal = item.Tanggal || '-';
+                const rawTanggal = item.Tanggal || '-';
+                const tanggal = formatTanggal(rawTanggal);
                 const status = item.Status ? item.Status.toString().toLowerCase() : 'publish';
-                const imgHeadline = item['Gambar Headline'] ? item['Gambar Headline'].toString().trim() : null;
+                
+                const rawImgHeadline = item['Gambar Headline'] ? item['Gambar Headline'].toString().trim() : null;
+                const imgHeadline = convertDriveUrl(rawImgHeadline);
 
                 if (status !== 'publish') return;
 
                 const pureText = stripHtml(item.Deskripsi);
-                const imgHtml = imgHeadline ? `<div class="karya-img-wrapper"><img src="${imgHeadline}" alt="${item.Judul}" class="karya-img" loading="lazy"></div>` : '';
+                const imgHtml = imgHeadline ? `<div class="karya-img-wrapper"><img src="${imgHeadline}" alt="${item.Judul}" class="karya-img" loading="lazy" onerror="this.style.display='none'"></div>` : '';
 
                 const cardHTML = `
                     <div class="col-md-6 col-lg-4 d-flex">
@@ -296,18 +290,30 @@
             });
         }
 
+        function injectMidline(htmlContent, midlineHtml) {
+            if (!midlineHtml) return htmlContent;
+            const pars = htmlContent.split('</p>');
+            if (pars.length <= 2) return htmlContent + midlineHtml;
+            const midIndex = Math.floor(pars.length / 2);
+            pars.splice(midIndex, 0, midlineHtml);
+            return pars.join('</p>'); 
+        }
+
         window.bacaArtikel = function(id) {
             const cachedData = JSON.parse(localStorage.getItem(CACHE_KEY));
             if(!cachedData) return;
             const artikel = cachedData.find(a => a.ID.toString() === id.toString());
             
             if(artikel) {
-                const imgHeadline = artikel['Gambar Headline'] ? artikel['Gambar Headline'].toString().trim() : null;
-                const imgMidline = artikel['Gambar Midline'] ? artikel['Gambar Midline'].toString().trim() : null;
+                const imgHeadline = convertDriveUrl(artikel['Gambar Headline'] ? artikel['Gambar Headline'].toString().trim() : null);
+                const imgMidline = convertDriveUrl(artikel['Gambar Midline'] ? artikel['Gambar Midline'].toString().trim() : null);
+                const tanggalBersih = formatTanggal(artikel.Tanggal);
                 
-                const headlineHtml = imgHeadline ? `<img src="${imgHeadline}" class="artikel-modal-img" alt="${artikel.Judul}">` : '';
-                const midlineHtml = imgMidline ? `<img src="${imgMidline}" class="artikel-modal-midimg" alt="Ilustrasi tambahan">` : '';
+                const headlineHtml = imgHeadline ? `<img src="${imgHeadline}" class="artikel-modal-img" alt="${artikel.Judul}" onerror="this.style.display='none'">` : '';
+                const midlineHtml = imgMidline ? `<img src="${imgMidline}" class="artikel-modal-midimg" alt="Ilustrasi tambahan" onerror="this.style.display='none'">` : '';
                 
+                const finalDeskripsi = injectMidline(artikel.Deskripsi, midlineHtml);
+
                 Swal.fire({
                     ...cmsSwal,
                     width: '850px',
@@ -317,12 +323,11 @@
                         <div class="artikel-modal-content">
                             <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
                                 <span class="karya-badge me-3">${artikel.Kategori || 'Jurnal'}</span>
-                                <small class="text-muted fw-medium"><i class="bi bi-calendar3 me-1"></i> Dipublikasikan pada: ${artikel.Tanggal || '-'}</small>
+                                <small class="text-muted fw-medium"><i class="bi bi-calendar3 me-1"></i> Dipublikasikan pada: ${tanggalBersih}</small>
                             </div>
                             ${headlineHtml}
                             <div class="artikel-modal-text">
-                                ${artikel.Deskripsi}
-                                ${midlineHtml}
+                                ${finalDeskripsi}
                             </div>
                         </div>
                     `
@@ -331,7 +336,7 @@
         }
 
         // ==========================================
-        // 3. SISTEM CMS (BACKEND PROCESSING)
+        // SISTEM CMS BACKEND
         // ==========================================
         async function openCMS() {
             const { value: pin } = await Swal.fire({
@@ -366,7 +371,7 @@
                     });
                 }
             } else if (pin) {
-                Swal.fire({ ...cmsSwal, icon: 'error', title: 'Akses Ditolak', text: 'Kode PIN yang Anda masukkan tidak valid.', confirmButtonColor: '#d33' });
+                Swal.fire({ ...cmsSwal, icon: 'error', title: 'Akses Ditolak', text: 'Kode PIN yang Anda masukkan tidak valid.' });
             }
         }
 
@@ -429,9 +434,10 @@
                 const result = await Swal.fire({
                     ...cmsSwal,
                     title: `Konfirmasi ${statusTarget}`,
-                    text: "Proses ini akan mengunggah gambar langsung ke Google Drive Anda. Lanjutkan?",
+                    text: "Proses ini akan mengunggah gambar ke Google Drive Anda. Lanjutkan?",
                     icon: 'question',
                     showCancelButton: true,
+                    confirmButtonColor: '#FFB703', // Warm Gold untuk Aksi Pemrosesan
                     confirmButtonText: 'Ya, Proses Sekarang'
                 });
 
@@ -444,7 +450,6 @@
                         didOpen: () => { Swal.showLoading(); }
                     });
 
-                    // Konversi File ke Base64
                     const headlineData = await getBase64(fileHeadline);
                     let midlineData = null;
                     if (fileMidline) midlineData = await getBase64(fileMidline);
@@ -461,7 +466,6 @@
                         imgMidlineMime: midlineData ? midlineData.mime : null
                     };
 
-                    // Execute Fetch to Google Apps Script
                     await fetch(WEB_APP_URL, {
                         method: 'POST',
                         mode: 'no-cors',
