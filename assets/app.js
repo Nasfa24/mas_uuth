@@ -1,73 +1,49 @@
 /**
  * CORE SCRIPT MAS UUTH MPA
- * Menangani History Trap, Global Caching, dan Form API
+ * UX Terkalibrasi: Profesional, Empatik, Elegan.
  */
 
-// URL API Google Apps Script (Sesuai dengan deployment terakhir Anda)
 const scriptURL = 'https://script.google.com/macros/s/AKfycbxOo_Z8IPxSXYgvuyxBna8ZEjGx0GLUJl2orrjaDtJZePRGmSMNYVatvXWbpLljQyzYNg/exec';
 
-// Konfigurasi Standar SweetAlert2 sesuai Brand Identity
+// Konfigurasi SweetAlert2 Berdasarkan Brand Identity Mas Uuth
 const swalConfig = {
-    backdrop: 'rgba(51, 51, 51, 0.6)', // Slate grey transparan (Anti-Flat)
-    borderRadius: '20px',
-    confirmButtonColor: '#50C878', // Emerald Green
-    cancelButtonColor: '#333333',  // Slate Grey Dark
-    customClass: { title: 'fw-bold' }
+    backdrop: 'rgba(51, 51, 51, 0.7)', // Slate Grey Dark (Transparan Elegan)
+    borderRadius: '24px', // Radius lebih lembut
+    confirmButtonColor: '#50C878', // Emerald Green (Primary)
+    cancelButtonColor: '#333333',  // Slate Grey (Accent)
+    color: '#333333',
+    background: '#FFFFFF', // Clean Slate
+    customClass: { 
+        title: 'fw-bold',
+        popup: 'shadow-lg border-0'
+    }
 };
 
 // ==========================================
-// 1. MENCEGAH TOMBOL BACK KELUAR APLIKASI (One-Time Soft Trap)
-// ==========================================
-let trapTriggered = false;
-
-function initAntiBack() {
-    history.pushState({ trap: true }, null, location.href);
-}
-
-// BFCache Handling untuk Safari/iOS
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted) initAntiBack();
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    initAntiBack();
-    
-    window.addEventListener('popstate', function(event) {
-        if (!trapTriggered) {
-            history.pushState({ trap: true }, null, location.href); 
-            Swal.fire({
-                ...swalConfig,
-                title: 'Tunggu Sebentar!',
-                text: 'Apakah Anda yakin ingin meninggalkan halaman ini?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Keluar',
-                cancelButtonText: 'Batal (Tetap di sini)'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    trapTriggered = true; 
-                    history.back(); 
-                }
-            });
-        }
-    });
-});
-
-// ==========================================
-// 2. FITUR CLEAR CACHE & REFRESH (Global)
+// 1. FITUR MANAJEMEN CACHE GLOBAL
 // ==========================================
 function refreshData() {
-    window.location.reload(true);
+    Swal.fire({
+        ...swalConfig,
+        title: 'Memperbarui...',
+        text: 'Menyinkronkan data terbaru.',
+        icon: 'info',
+        timer: 1000,
+        showConfirmButton: false
+    }).then(() => {
+        window.location.reload(true);
+    });
 }
 
 function clearCacheAndRefresh() {
     Swal.fire({
         ...swalConfig,
-        title: 'Membersihkan Cache',
-        text: 'Sistem sedang diperbarui ke versi terbaru...',
+        title: 'Pembersihan Sistem',
+        text: 'Aplikasi akan disegarkan ke versi paling mutakhir.',
         icon: 'success',
         timer: 1500,
-        showConfirmButton: false
+        showConfirmButton: false,
+        confirmButtonColor: '#FFB703' // Warm Gold
     }).then(() => {
         localStorage.clear();
         sessionStorage.clear();
@@ -76,7 +52,7 @@ function clearCacheAndRefresh() {
 }
 
 // ==========================================
-// 3. KIRIM DATA KE GOOGLE SCRIPT (Form Aspirasi)
+// 2. SISTEM PENGIRIMAN ASPIRASI (LEAD CAPTURE)
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const formAspirasi = document.getElementById('formAspirasi');
@@ -85,13 +61,12 @@ document.addEventListener("DOMContentLoaded", () => {
         formAspirasi.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Validasi Cek Koneksi (Offline State)
             if (!navigator.onLine) {
-                Swal.fire({ ...swalConfig, title: 'Offline', text: 'Terjadi kesalahan jaringan. Cek koneksi Anda.', icon: 'error' });
+                Swal.fire({ ...swalConfig, title: 'Koneksi Terputus', text: 'Mohon periksa koneksi internet Anda.', icon: 'error' });
                 return;
             }
 
-            // Proteksi Spam (Honeypot) - Jika field hidden terisi, bot sedang beraksi
+            // Proteksi Anti-Spam Bot
             const honeypot = document.getElementById('website')?.value;
             if(honeypot) {
                 formAspirasi.reset();
@@ -103,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             Swal.fire({
                 ...swalConfig,
-                title: 'Mengirim Aspirasi...',
+                title: 'Mengirimkan Pesan...',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
@@ -117,14 +92,14 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(() => {
                 Swal.fire({
                     ...swalConfig,
-                    title: 'Berhasil!',
-                    text: 'Aspirasi Anda telah diterima oleh Tim Mas Uuth.',
+                    title: 'Aspirasi Diterima!',
+                    text: 'Terima kasih. Pesan Anda telah masuk ke meja tim Mas Uuth.',
                     icon: 'success'
                 });
                 formAspirasi.reset();
             })
             .catch(error => {
-                Swal.fire({ ...swalConfig, title: 'Error', text: 'Terjadi kesalahan jaringan.', icon: 'error' });
+                Swal.fire({ ...swalConfig, title: 'Terjadi Kesalahan', text: 'Gagal mengirim pesan. Coba beberapa saat lagi.', icon: 'error' });
             });
         });
     }
