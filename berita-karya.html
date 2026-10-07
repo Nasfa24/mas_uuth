@@ -12,11 +12,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- Quill.js CSS untuk Editor Rich Text -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <!-- Universal Stylesheet -->
     <link rel="stylesheet" href="assets/style.css">
 
+    <!-- CSS Tambahan Khusus -->
     <style>
         .karya-card { display: flex; flex-direction: column; padding: 0 !important; overflow: hidden; }
         .karya-img-wrapper { width: 100%; height: 200px; overflow: hidden; background-color: var(--slate-grey-light); border-bottom: 1px solid rgba(0,0,0,0.05); }
@@ -37,6 +42,9 @@
         .artikel-modal-text h2, .artikel-modal-text h3 { color: var(--emerald-green); margin-top: 1.5rem; margin-bottom: 1rem; }
 
         #secret-door { cursor: default; user-select: none; } 
+        
+        /* FIX: Mutlak menempatkan Pop-up SweetAlert2 di atas segalanya */
+        .swal2-container { z-index: 99999 !important; }
         
         #cms-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
@@ -92,8 +100,8 @@
     </main>
 
     <div class="floating-controls">
-        <button id="btn-refresh-data" class="btn-float btn-refresh"><i class="bi bi-arrow-clockwise me-2"></i> Refresh Data</button>
-        <button id="btn-clear-cache" class="btn-float btn-clear"><i class="bi bi-trash3-fill me-2"></i> Clear Cache</button>
+        <button id="btn-refresh-global" class="btn-float btn-refresh"><i class="bi bi-arrow-clockwise me-2"></i> Refresh Data</button>
+        <button id="btn-clear-global" class="btn-float btn-clear"><i class="bi bi-trash3-fill me-2"></i> Clear Cache</button>
     </div>
 
     <!-- CMS OVERLAY RAHASIA -->
@@ -136,9 +144,10 @@
                     </div>
 
                     <div class="col-12 mt-5 pt-3 border-top d-flex gap-3 justify-content-end">
-                        <button type="button" id="btn-preview-cms" class="btn btn-secondary-custom"><i class="bi bi-eye"></i> Preview</button>
-                        <button type="button" id="btn-draft-cms" class="btn btn-secondary-custom bg-dark text-white border-dark"><i class="bi bi-save"></i> Simpan Draft</button>
-                        <button type="button" id="btn-publish-cms" class="btn btn-primary-custom"><i class="bi bi-send-check"></i> Terbitkan (Publish)</button>
+                        <!-- FIX: Menggunakan tipe button tanpa atribut onclick, diikat via JS EventListener -->
+                        <button type="button" id="btn-preview" class="btn btn-secondary-custom"><i class="bi bi-eye"></i> Preview</button>
+                        <button type="button" id="btn-draft" class="btn btn-secondary-custom bg-dark text-white border-dark"><i class="bi bi-save"></i> Simpan Draft</button>
+                        <button type="button" id="btn-publish" class="btn btn-primary-custom"><i class="bi bi-send-check"></i> Terbitkan (Publish)</button>
                     </div>
                 </div>
             </form>
@@ -156,17 +165,52 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
     <script>
+        // ==========================================
+        // KONFIGURASI ABSOLUT
+        // ==========================================
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxOo_Z8IPxSXYgvuyxBna8ZEjGx0GLUJl2orrjaDtJZePRGmSMNYVatvXWbpLljQyzYNg/exec';
         const CACHE_KEY = 'mas_uuth_berita_data';
         const CACHE_TIMESTAMP_KEY = 'mas_uuth_berita_timestamp';
         const TTL_MS = 15 * 60 * 1000;
 
+        // Custom config SweetAlert agar terlepas dari app.js
+        const cmsSwal = {
+            backdrop: 'rgba(51, 51, 51, 0.8)',
+            borderRadius: '20px',
+            confirmButtonColor: '#50C878',
+            cancelButtonColor: '#333333',
+            customClass: { popup: 'rounded-4', title: 'fw-bold' }
+        };
+
+        let quill; // Variabel Editor Teks
+
         document.addEventListener("DOMContentLoaded", () => { 
             initDataFetch(); 
-            initCMSBindings(); // Inisiasi tombol-tombol CMS secara aman
+            initCMSBindings(); // Inisiasi Tombol Secara Kokoh
         });
 
         // ==========================================
-        // SISTEM RENDER BERITA (FRONT-END)
+        // 1. EVENT BINDINGS (PENGGANTI ONCLICK)
+        // ==========================================
+        function initCMSBindings() {
+            // Pintu Rahasia & Tutup
+            document.getElementById('secret-door').addEventListener('click', openCMS);
+            document.getElementById('btn-close-cms').addEventListener('click', closeCMS);
+
+            // Tombol Refresh/Clear Halaman Utama
+            document.getElementById('btn-refresh-global').addEventListener('click', () => window.location.reload(true));
+            document.getElementById('btn-clear-global').addEventListener('click', () => {
+                localStorage.clear(); sessionStorage.clear(); window.location.reload(true);
+            });
+
+            // Tombol Eksekusi Berita (Pusat Masalah Sebelumnya)
+            document.getElementById('btn-preview').addEventListener('click', previewCMS);
+            document.getElementById('btn-draft').addEventListener('click', () => submitCMS('Draft'));
+            document.getElementById('btn-publish').addEventListener('click', () => submitCMS('Publish'));
+        }
+
+        // ==========================================
+        // 2. FETCH & RENDER BERITA (FRONTEND)
         // ==========================================
         async function initDataFetch() {
             const cachedData = localStorage.getItem(CACHE_KEY);
@@ -182,8 +226,7 @@
             Toast.fire({ icon: 'info', title: 'Menarik data terbaru dari server...' });
 
             try {
-                // scriptURL didefinisikan di app.js
-                const response = await fetch(scriptURL);
+                const response = await fetch(WEB_APP_URL);
                 if (!response.ok) throw new Error('Network response failed');
                 
                 const data = await response.json();
@@ -196,7 +239,7 @@
                     Toast.fire({ icon: 'warning', title: 'Server sibuk. Menampilkan data offline.', timer: 5000 });
                 } else {
                     document.getElementById('loading-indicator').style.display = 'none';
-                    Swal.fire({ confirmButtonColor: '#50C878', title: 'Koneksi Terputus', text: 'Gagal memuat data dari server.', icon: 'error', confirmButtonText: 'Coba Lagi' }).then((result) => { if (result.isConfirmed) refreshData(); });
+                    Swal.fire({ ...cmsSwal, title: 'Koneksi Terputus', text: 'Gagal memuat data dari server.', icon: 'error', confirmButtonText: 'Coba Lagi' }).then((res) => { if (res.isConfirmed) window.location.reload(true); });
                 }
             }
         }
@@ -266,9 +309,9 @@
                 const midlineHtml = imgMidline ? `<img src="${imgMidline}" class="artikel-modal-midimg" alt="Ilustrasi tambahan">` : '';
                 
                 Swal.fire({
+                    ...cmsSwal,
                     width: '850px',
                     showCloseButton: true, showConfirmButton: false,
-                    customClass: { popup: 'rounded-4' },
                     title: `<h2 style="font-family:'Satoshi', sans-serif; font-weight:900; color:#1a1a1a; margin-bottom: 5px; font-size:2.5rem; text-align:left; line-height:1.2;">${artikel.Judul}</h2>`,
                     html: `
                         <div class="artikel-modal-content">
@@ -288,40 +331,19 @@
         }
 
         // ==========================================
-        // SISTEM CMS RAHASIA DENGAN PIN PROTECTION
+        // 3. SISTEM CMS (BACKEND PROCESSING)
         // ==========================================
-        let quill;
-
-        function initCMSBindings() {
-            // Pintu Rahasia (Huruf B)
-            document.getElementById('secret-door').addEventListener('click', openCMS);
-            
-            // Tombol Tutup
-            document.getElementById('btn-close-cms').addEventListener('click', (e) => { e.preventDefault(); closeCMS(); });
-            
-            // Tombol Navigasi Bawah
-            document.getElementById('btn-refresh-data').addEventListener('click', refreshData);
-            document.getElementById('btn-clear-cache').addEventListener('click', clearCacheAndRefresh);
-            
-            // Tombol Aksi CMS
-            document.getElementById('btn-preview-cms').addEventListener('click', (e) => { e.preventDefault(); previewCMS(); });
-            document.getElementById('btn-draft-cms').addEventListener('click', (e) => { e.preventDefault(); submitCMS('Draft'); });
-            document.getElementById('btn-publish-cms').addEventListener('click', (e) => { e.preventDefault(); submitCMS('Publish'); });
-        }
-
         async function openCMS() {
             const { value: pin } = await Swal.fire({
+                ...cmsSwal,
                 title: 'Akses Terbatas',
                 input: 'password',
                 inputLabel: 'Masukkan PIN Keamanan',
                 inputPlaceholder: 'PIN',
                 inputAttributes: { maxlength: 6, autocapitalize: 'off', autocorrect: 'off' },
                 showCancelButton: true,
-                confirmButtonColor: '#50C878',
-                cancelButtonColor: '#333333',
                 confirmButtonText: 'Buka Akses',
-                cancelButtonText: 'Batal',
-                customClass: { popup: 'rounded-4' }
+                cancelButtonText: 'Batal'
             });
 
             if (pin === '525252') {
@@ -344,7 +366,7 @@
                     });
                 }
             } else if (pin) {
-                Swal.fire({ icon: 'error', title: 'Akses Ditolak', text: 'Kode PIN yang Anda masukkan tidak valid.', confirmButtonColor: '#d33', customClass: { popup: 'rounded-4' } });
+                Swal.fire({ ...cmsSwal, icon: 'error', title: 'Akses Ditolak', text: 'Kode PIN yang Anda masukkan tidak valid.', confirmButtonColor: '#d33' });
             }
         }
 
@@ -373,7 +395,8 @@
             const deskripsiHTML = quill.root.innerHTML;
 
             Swal.fire({
-                width: '850px', showCloseButton: true, showConfirmButton: false, customClass: { popup: 'rounded-4' },
+                ...cmsSwal,
+                width: '850px', showCloseButton: true, showConfirmButton: false,
                 title: `<h2 style="font-family:'Satoshi', sans-serif; font-weight:900; font-size:2.5rem; text-align:left; line-height:1.2;">[PREVIEW] ${judul}</h2>`,
                 html: `
                     <div class="artikel-modal-content">
@@ -391,36 +414,37 @@
         }
 
         async function submitCMS(statusTarget) {
-            const judul = document.getElementById('cms-judul').value.trim();
-            const kategori = document.getElementById('cms-kategori').value;
-            const deskripsiHTML = quill.root.innerHTML;
-            
-            const fileHeadline = document.getElementById('cms-img-headline').files[0];
-            const fileMidline = document.getElementById('cms-img-midline').files[0];
+            try {
+                const judul = document.getElementById('cms-judul').value.trim();
+                const kategori = document.getElementById('cms-kategori').value;
+                const deskripsiHTML = quill.root.innerHTML;
+                
+                const fileHeadline = document.getElementById('cms-img-headline').files[0];
+                const fileMidline = document.getElementById('cms-img-midline').files[0];
 
-            if (!judul) return Swal.fire({confirmButtonColor: '#50C878', icon: 'error', title: 'Oops', text: 'Judul Wajib Diisi!'});
-            if (!fileHeadline) return Swal.fire({confirmButtonColor: '#50C878', icon: 'error', title: 'Oops', text: 'Gambar Headline Wajib Diunggah!'});
-            if (quill.getText().trim().length === 0) return Swal.fire({confirmButtonColor: '#50C878', icon: 'error', title: 'Oops', text: 'Isi berita tidak boleh kosong!'});
+                if (!judul) return Swal.fire({...cmsSwal, icon: 'error', title: 'Oops', text: 'Judul Wajib Diisi!'});
+                if (!fileHeadline) return Swal.fire({...cmsSwal, icon: 'error', title: 'Oops', text: 'Gambar Headline Wajib Diunggah!'});
+                if (quill.getText().trim().length === 0) return Swal.fire({...cmsSwal, icon: 'error', title: 'Oops', text: 'Isi berita tidak boleh kosong!'});
 
-            const result = await Swal.fire({
-                confirmButtonColor: '#50C878',
-                cancelButtonColor: '#333333',
-                title: `Konfirmasi ${statusTarget}`,
-                text: "Proses ini akan mengunggah gambar langsung ke Google Drive Anda. Lanjutkan?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Proses Sekarang'
-            });
-
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Memproses ke Server...',
-                    html: 'Sedang mengunggah gambar ke Drive & menulis ke Database.<br><b>Jangan tutup halaman ini.</b>',
-                    allowOutsideClick: false,
-                    didOpen: () => { Swal.showLoading(); }
+                const result = await Swal.fire({
+                    ...cmsSwal,
+                    title: `Konfirmasi ${statusTarget}`,
+                    text: "Proses ini akan mengunggah gambar langsung ke Google Drive Anda. Lanjutkan?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Proses Sekarang'
                 });
 
-                try {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        ...cmsSwal,
+                        title: 'Memproses ke Server...',
+                        html: 'Sedang mengunggah gambar ke Drive & menulis ke Database.<br><b>Jangan tutup halaman ini.</b>',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+
+                    // Konversi File ke Base64
                     const headlineData = await getBase64(fileHeadline);
                     let midlineData = null;
                     if (fileMidline) midlineData = await getBase64(fileMidline);
@@ -437,7 +461,8 @@
                         imgMidlineMime: midlineData ? midlineData.mime : null
                     };
 
-                    const response = await fetch(scriptURL, {
+                    // Execute Fetch to Google Apps Script
+                    await fetch(WEB_APP_URL, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -445,17 +470,19 @@
                     });
 
                     Swal.fire({
-                        confirmButtonColor: '#50C878',
+                        ...cmsSwal,
                         title: 'Terkirim!',
                         text: `Artikel berhasil disimpan dengan status: ${statusTarget}.`,
                         icon: 'success'
                     }).then(() => {
-                        clearCacheAndRefresh(); 
+                        localStorage.clear(); 
+                        sessionStorage.clear(); 
+                        window.location.reload(true); 
                     });
-
-                } catch (error) {
-                    Swal.fire({confirmButtonColor: '#50C878', title: 'Error', text: 'Gagal mengunggah. Cek koneksi Anda.', icon: 'error'});
                 }
+            } catch (error) {
+                console.error("Submit Error:", error);
+                Swal.fire({...cmsSwal, title: 'Error Fatal', text: 'Terjadi masalah saat memproses data. Cek log konsol.', icon: 'error'});
             }
         }
     </script>
